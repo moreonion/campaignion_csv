@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations and callbacks for the campaignion_csv mdule.
+ */
+
+use Drupal\campaignion_csv\FilePattern\Monthly;
+use Drupal\campaignion_csv\WebformGeneric\Exporter as WebformExporter;
+use Drupal\campaignion_csv\ExporterFactory;
+
+/**
+ * Implements hook_campaignion_csv_info().
+ */
+function campaignion_csv_campaignion_csv_info() {
+  $export['actions_monthly'] = [
+    'file_pattern' => [
+      'class' => Monthly::class,
+      'path' => 'actions/%Y-%m.csv',
+      'retention_period' => new \DateInterval('P6M'),
+    ],
+    'exporter' => [
+      'class' => WebformExporter::class,
+      'factory_class' => ExporterFactory::class,
+      'actions' => TRUE,
+      'donations' => FALSE,
+    ],
+  ];
+  $export['donations_monthly'] = [
+    'file_pattern' => [
+      'class' => Monthly::class,
+      'path' => 'donations/%Y-%m.csv',
+      'retention_period' => new \DateInterval('P6M'),
+    ],
+    'exporter' => [
+      'class' => WebformExporter::class,
+      'factory_class' => ExporterFactory::class,
+      'actions' => FALSE,
+      'donations' => TRUE,
+    ],
+  ];
+  return $export;
+}

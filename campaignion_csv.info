@@ -1,0 +1,6 @@
+name = Campaignion CSV
+description = Provide pre-generated CSV exports for the campaignion submissions and CRM.
+core = 7.x
+php = 5.4
+dependencies[] = campaignion_action
+dependencies[] = variable
