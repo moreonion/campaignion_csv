@@ -46,20 +46,6 @@ class Exporter {
     $this->nodes = $this->getNodes();
   }
 
-  protected function normalizeRowLength($rows, $fill = []) {
-    $count = function($x) {
-      return count($x);
-    };
-    $num_cols = max(array_map($count, $rows));
-
-    $fill_row = function($x) use ($num_cols, $fill) {
-      $c = count($x);
-      return array_merge($x, array_fill(0, $num_cols - $c, $fill));
-    };
-    return array_map($fill_row, $rows);
-  }
-
-
   protected function getSubmissions() {
     $nids = array_keys($this->nodes);
     list($start, $end) = $this->timeframe->getTimeStamps();
@@ -102,39 +88,23 @@ class Exporter {
 
     foreach ($this->nodes as $node) {
       $options = $options_by_nid[$node->nid];
-
       $submission_info_cols += webform_results_download_submission_information($node, $options);
+
       foreach ($node->webform['components'] as $component) {
         if (webform_component_feature($component['type'], 'csv')) {
           $component_exporter = new ComponentExporter($component, $options);
           $slot_id = $component_exporter->slotId();
-          $slots[$slot_id]['headers'][] = $component_exporter->csvHeaders();
-          $slots[$slot_id]['components'][$node->nid] = $component_exporter;
+          if (!isset($slots[$slot_id])) {
+            $slots[$slot_id] = new Slot($slot_id);
+          }
+          $slots[$slot_id]->setComponent($node->nid, $component_exporter);
         }
       }
     }
 
     $slot_headers = [];
     foreach ($slots as $slot_id => $slot) {
-      $slot_header = [[], [], []];
-      foreach ($slot['headers'] as $component_headers) {
-        foreach ($component_headers as $row_nr => $row) {
-          if (!is_array($row)) {
-            $row = [$row];
-          }
-          foreach ($row as $col_nr => $col_label) {
-            if (!isset($slot_header[$row_nr][$col_nr]) || !in_array($col_label, $slot_header[$row_nr][$col_nr])) {
-              $slot_header[$row_nr][$col_nr][] = $col_label;
-            }
-          }
-        }
-      }
-      $slot_headers[$slot_id] = $slot_header;
-    }
-
-    foreach ($slot_headers as $slot_id => $header) {
-      $header[] = [[$slot_id]];
-      $slot_headers[$slot_id] = $this->normalizeRowLength($header);
+      $slot_headers[$slot_id] = $slot->headers();
     }
 
     for ($row_num = 0; $row_num <= 3; $row_num++) {
@@ -147,9 +117,7 @@ class Exporter {
       }
 
       foreach ($slot_headers as $headers) {
-        foreach ($headers[$row_num] as $cell_candidates) {
-          $row[] = implode(' / ', $cell_candidates);
-        }
+        $row = array_merge($row, $headers[$row_num]);
       }
       $writer->writeRow($row);
     }
@@ -167,14 +135,8 @@ class Exporter {
       }
 
       // Add submission data.
-      foreach ($slots as $slot_id => $slot) {
-        if (isset($slot['components'][$nid])) {
-          $component_exporter = $slot['components'][$nid];
-          $row = array_merge($row, $component_exporter->csvRow($submission));
-        }
-        else {
-          $row[] = '';
-        }
+      foreach ($slots as $slot) {
+        $row = array_merge($row, $slot->row($submission));
       }
       $writer->writeRow($row);
       $row_count++;
