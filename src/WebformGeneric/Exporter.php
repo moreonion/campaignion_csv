@@ -103,15 +103,13 @@ class Exporter {
     foreach ($this->nodes as $node) {
       $options = $options_by_nid[$node->nid];
 
+      $submission_info_cols += webform_results_download_submission_information($node, $options);
       foreach ($node->webform['components'] as $component) {
         if (webform_component_feature($component['type'], 'csv')) {
-          $slot_id = $component['form_key'];
-          $slots[$slot_id]['headers'][] = [
-            'nid' => $node->nid,
-            'cid' => $component['cid'],
-            'header' => (array) webform_component_invoke($component['type'], 'csv_headers', $component, $options),
-          ];
-          $slots[$slot_id]['components'][$node->nid] = $component['cid'];
+          $component_exporter = new ComponentExporter($component, $options);
+          $slot_id = $component_exporter->slotId();
+          $slots[$slot_id]['headers'][] = $component_exporter->csvHeaders();
+          $slots[$slot_id]['components'][$node->nid] = $component_exporter;
         }
       }
     }
@@ -119,8 +117,8 @@ class Exporter {
     $slot_headers = [];
     foreach ($slots as $slot_id => $slot) {
       $slot_header = [[], [], []];
-      foreach ($slot['headers'] as $component_data) {
-        foreach ($component_data['header'] as $row_nr => $row) {
+      foreach ($slot['headers'] as $component_headers) {
+        foreach ($component_headers as $row_nr => $row) {
           if (!is_array($row)) {
             $row = [$row];
           }
@@ -170,15 +168,9 @@ class Exporter {
 
       // Add submission data.
       foreach ($slots as $slot_id => $slot) {
-        if (isset($slots[$slot_id]['components'][$nid])) {
-          $component = $submission->webform->component($slots[$slot_id]['components'][$nid]);
-          $data = webform_component_invoke($component['type'], 'csv_data', $component, $options, $submission->valuesByCid($component['cid']));
-          if (is_array($data)) {
-            $row = array_merge($row, $data);
-          }
-          else {
-            $row[] = $data;
-          }
+        if (isset($slot['components'][$nid])) {
+          $component_exporter = $slot['components'][$nid];
+          $row = array_merge($row, $component_exporter->csvRow($submission));
         }
         else {
           $row[] = '';
