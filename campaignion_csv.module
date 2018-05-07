@@ -9,6 +9,7 @@ use Drupal\campaignion_csv\FilePattern\Monthly;
 use Drupal\campaignion_csv\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\ExporterFactory;
 use Drupal\campaignion_csv\ContactExporter;
+use Drupal\campaignion_csv\ActivityExporter;
 
 /**
  * Implements hook_campaignion_csv_info().
@@ -50,6 +51,17 @@ function campaignion_csv_campaignion_csv_info() {
       'class' => ContactExporter::class,
       'factory_class' => ExporterFactory::class,
       'bundle' => 'contact',
+    ],
+  ];
+  $export['activities_monthly'] = [
+    'file_pattern' => [
+      'class' => Monthly::class,
+      'path' => 'activities/%Y-%m.csv',
+      'retention_period' => new \DateInterval('P6M'),
+    ],
+    'exporter' => [
+      'class' => ActivityExporter::class,
+      'factory_class' => ExporterFactory::class,
     ],
   ];
   return $export;
