@@ -1,28 +1,32 @@
 <?php
 
-namespace Drupal\campaiginon_csv\FilePattern;
+namespace Drupal\campaignion_csv\FilePattern;
+
+use Drupal\campaignion_csv\TimeframeFileInfo;
 
 class MonthlyFilePatternTest extends \DrupalUnitTestCase {
 
   public function testExpandKeysArePaths() {
     $pattern = 'a/%Y-%m';
     $period = new \DatePeriod(new \DateTimeImmutable('2018-01-01'), new \DateInterval('P1M'), new \DateTimeImmutable('2018-04-01'));
-    $file_pattern = new Monthly($pattern, $period);
+    $refresh_interval = new \DateInterval('PT24H');
+    $file_pattern = new Monthly($pattern, $period, $refresh_interval);
     $this->assertEqual([
       'a/2018-01',
       'a/2018-02',
       'a/2018-03',
-    ], array_keys(iterator_to_array($file_pattern->expand('/root'))));
+    ], array_keys($file_pattern->expand('/root')));
 
   }
 
   public function testExpandReturnsFiles() {
     $pattern = 'a/%Y-%m';
     $period = new \DatePeriod(new \DateTimeImmutable('2018-01-01'), new \DateInterval('P1M'), new \DateTimeImmutable('2018-04-01'));
-    $file_pattern = new Monthly($pattern, $period);
-    $files = iterator_to_array($file_pattern->expand('/root'));
+    $refresh_interval = new \DateInterval('PT24H');
+    $file_pattern = new Monthly($pattern, $period, $refresh_interval);
+    $files = $file_pattern->expand('/root');
     $this->assertCount(3, $files);
-    $this->assertContainsOnlyInstancesOf(File::class, $files);
+    $this->assertContainsOnlyInstancesOf(TimeframeFileInfo::class, $files);
   }
 
   public function testFromInfo() {
@@ -37,7 +41,7 @@ class MonthlyFilePatternTest extends \DrupalUnitTestCase {
       'a/2018-01',
       'a/2018-02',
       'a/2018-03',
-    ], array_keys(iterator_to_array($file_pattern->expand('/root'))));
+    ], array_keys($file_pattern->expand('/root')));
   }
 
   public function testFromInfoIncludingCurrentMonth() {
@@ -53,7 +57,7 @@ class MonthlyFilePatternTest extends \DrupalUnitTestCase {
       'a/2018-02',
       'a/2018-03',
       'a/2018-04',
-    ], array_keys(iterator_to_array($file_pattern->expand('/root'))));
+    ], array_keys($file_pattern->expand('/root')));
   }
 
 }
