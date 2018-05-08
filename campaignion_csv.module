@@ -6,8 +6,10 @@
  */
 
 use Drupal\campaignion_csv\FilePattern\Monthly;
+use Drupal\campaignion_csv\FilePattern\SingleFile;
 use Drupal\campaignion_csv\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\ExporterFactory;
+use Drupal\campaignion_csv\TimeframeExporterFactory;
 use Drupal\campaignion_csv\ContactExporter;
 use Drupal\campaignion_csv\ActivityExporter;
 
@@ -24,7 +26,7 @@ function campaignion_csv_campaignion_csv_info() {
     ],
     'exporter' => [
       'class' => WebformExporter::class,
-      'factory_class' => ExporterFactory::class,
+      'factory_class' => TimeframeExporterFactory::class,
       'actions' => TRUE,
       'donations' => FALSE,
     ],
@@ -38,16 +40,15 @@ function campaignion_csv_campaignion_csv_info() {
     ],
     'exporter' => [
       'class' => WebformExporter::class,
-      'factory_class' => ExporterFactory::class,
+      'factory_class' => TimeframeExporterFactory::class,
       'actions' => FALSE,
       'donations' => TRUE,
     ],
   ];
-  $export['contacts_monthly'] = [
+  $export['contacts'] = [
     'file_pattern' => [
-      'class' => Monthly::class,
-      'path' => 'contacts/%Y-%m.csv',
-      'retention_period' => new \DateInterval('P6M'),
+      'class' => SingleFile::class,
+      'path' => 'contacts.csv',
       'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
     'exporter' => [
@@ -65,7 +66,7 @@ function campaignion_csv_campaignion_csv_info() {
     ],
     'exporter' => [
       'class' => ActivityExporter::class,
-      'factory_class' => ExporterFactory::class,
+      'factory_class' => TimeframeExporterFactory::class,
     ],
   ];
   return $export;

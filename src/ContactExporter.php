@@ -9,7 +9,7 @@ use Drupal\campaignion\ContactTypeManager;
  */
 class ContactExporter {
 
-  public function fromInfo(Timeframe $timeframe, array $info) {
+  public function fromInfo(array $info) {
     return new static($info['bundle']);
   }
 
