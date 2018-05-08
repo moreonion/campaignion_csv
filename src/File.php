@@ -26,15 +26,19 @@ class File {
   }
 
   protected function openFile() {
-    return new \SplFileObject($this->path, 'w');
+    return new CsvFile($this->path, 'w');
+  }
+
+  protected function needsBuild() {
+    list($start, $end) = $this->timeframe->getTimestamps();
+    return !file_exists($this->path) || filemtime($this->path) < $end;
   }
 
   public function generate() {
-    if (!file_exists($this->path)) {
+    if ($this->needsBuild()) {
       $this->ensureDir();
       $exporter = $this->exporterFactory->createExporter($this->timeframe);
-      $writer = new CsvWriter($this->openFile());
-      $exporter->writeTo($writer);
+      $exporter->writeTo($this->openFile());
     }
   }
 

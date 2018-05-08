@@ -40,15 +40,15 @@ class ContactExporter {
     }
   }
 
-  public function writeTo(CsvWriter $writer) {
+  public function writeTo(CsvFile $file) {
     $exporter = ContactTypeManager::instance()
       ->exporter('csv', $this->bundle);
-    $writer->writeRow($exporter->header(0));
-    $writer->writeRow($exporter->header(1));
+    $file->writeRow($exporter->header(0));
+    $file->writeRow($exporter->header(1));
     foreach ($this->contacts() as $contact) {
       $row = [];
       $exporter->setContact($contact);
-      $writer->writeRow($exporter->row());
+      $file->writeRow($exporter->row());
     }
   }
 

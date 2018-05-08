@@ -36,7 +36,7 @@ class ActivityExporter {
     return $q;
   }
 
-  public function writeTo(CsvWriter $writer) {
+  public function writeTo(CsvFile $file) {
     $header = [
       'Activity ID',
       'Contact ID',
@@ -51,7 +51,7 @@ class ActivityExporter {
       'from provider',
       'Opt-In statement',
     ];
-    $writer->writeRow($header);
+    $file->writeRow($header);
 
     foreach ($this->buildQuery()->execute() as $r) {
       $row = [
@@ -68,7 +68,7 @@ class ActivityExporter {
         $r->from_provider,
         $r->optin_statement,
       ];
-      $writer->writeRow($row);
+      $file->writeRow($row);
     }
   }
 

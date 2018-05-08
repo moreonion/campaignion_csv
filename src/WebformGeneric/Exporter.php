@@ -4,7 +4,7 @@ namespace Drupal\campaignion_csv\WebformGeneric;
 
 use Drupal\little_helpers\Webform\Submission;
 use Drupal\campaignion_action\Loader;
-use Drupal\campaignion_csv\CsvWriter;
+use Drupal\campaignion_csv\CsvFile;
 use Drupal\campaignion_csv\Timeframe;
 
 $webform_path = drupal_get_path('module', 'webform');
@@ -81,7 +81,7 @@ class Exporter {
     return $options;
   }
 
-  public function writeTo(CsvWriter $writer) {
+  public function writeTo(CsvFile $file) {
     $slots = [];
     $options_by_nid = $this->getDownloadOptions();
     $submission_info_cols = [];
@@ -119,7 +119,7 @@ class Exporter {
       foreach ($slot_headers as $headers) {
         $row = array_merge($row, $headers[$row_num]);
       }
-      $writer->writeRow($row);
+      $file->writeRow($row);
     }
 
     $row_count = 0;
@@ -138,7 +138,7 @@ class Exporter {
       foreach ($slots as $slot) {
         $row = array_merge($row, $slot->row($submission));
       }
-      $writer->writeRow($row);
+      $file->writeRow($row);
       $row_count++;
     }
   }
