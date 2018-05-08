@@ -7,7 +7,7 @@ namespace Drupal\campaignion_csv;
  */
 class Timeframe {
 
-  public function __construct(\DateTime $start, \DateInterval $interval) {
+  public function __construct(\DateTimeImmutable $start, \DateInterval $interval) {
     $this->start = $start;
     $this->interval = $interval;
   }
@@ -15,7 +15,7 @@ class Timeframe {
   public function getTimestamps() {
     return [
       $this->start->getTimeStamp(),
-      (clone $this->start)->add($this->interval)->getTimestamp(),
+      $this->start->add($this->interval)->getTimestamp(),
     ];
   }
 

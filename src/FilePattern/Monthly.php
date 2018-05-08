@@ -14,9 +14,17 @@ class Monthly {
     if (!$now) {
       $now = new \DateTime();
     }
-    $current = new \DateTime($now->format('Y-m') . '-01');
-    $start = (clone $current)->sub($info['retention_period']);
-    $period = new \DatePeriod($start, new \DateInterval('P1M'), $current);
+    $info += [
+      'include_current' => TRUE,
+    ];
+    $one_month = new \DateInterval('P1M');
+
+    $end = new \DateTimeImmutable($now->format('Y-m') . '-01');
+    $start = $end->sub($info['retention_period']);
+    if ($info['include_current']) {
+      $end = $end->add($one_month);
+    }
+    $period = new \DatePeriod($start, $one_month, $end);
     return new static($info['path'], $period);
   }
 
