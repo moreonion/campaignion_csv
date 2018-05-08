@@ -42,7 +42,7 @@ class DirectoryManager {
    */
   public function build() {
     foreach ($this->files as $file) {
-      $file->generate();
+      $file->update();
     }
   }
 
