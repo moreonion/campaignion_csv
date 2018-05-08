@@ -9,6 +9,7 @@ class TimeframeFileInfo extends \SplFileInfo implements ExportableFileInfoInterf
 
   protected $timeframe;
   protected $exporterFactory;
+  protected $refreshInterval;
 
   /**
    * Create a new instance based on a timeframe.
@@ -17,10 +18,13 @@ class TimeframeFileInfo extends \SplFileInfo implements ExportableFileInfoInterf
    *   Full path to the file (even if it does not yet exist).
    * @param \Drupal\campaignion_csv\Timeframe $timeframe
    *   The timeframe for which data should be exported.
+   * @param \DateInterval $refresh_interval
+   *   The minimum interval that needs to pass between two builds of the file.
    */
-  public function __construct($path, Timeframe $timeframe) {
+  public function __construct($path, Timeframe $timeframe, \DateInterval $refresh_interval) {
     parent::__construct($path);
     $this->timeframe = $timeframe;
+    $this->refreshInterval = $refresh_interval;
   }
 
   /**
@@ -60,7 +64,16 @@ class TimeframeFileInfo extends \SplFileInfo implements ExportableFileInfoInterf
    */
   protected function needsBuild() {
     list($start, $end) = $this->timeframe->getTimestamps();
-    return !$this->isFile() || $this->getMTime() < $end;
+    if (!$this->isFile()) {
+      return TRUE;
+    }
+    $mtime = $this->getMTime();
+    if ($mtime < $end) {
+      // The interval was still ongoing the last time the file was generated.
+      // We regenerate the file if the refresh interval has passed since then.
+      return $this->refreshInterval->format('s') < time() - $mtime;
+    }
+    return FALSE;
   }
 
   /**

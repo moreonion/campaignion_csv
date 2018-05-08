@@ -21,6 +21,8 @@ class Monthly implements FilePatternInterface {
    *   - retention_period: A \DateInterval specifying how long old files should
    *     be kept (or generated).
    *   - include_current: Whether the ongoing month should be included.
+   *   - refresh_interval: A \DateInterval that defines how often files for the
+   *     ongoing period are regenerated.
    */
   public static function fromInfo(array $info, \DateTimeInterface $now = NULL) {
     if (!$now) {
@@ -28,6 +30,7 @@ class Monthly implements FilePatternInterface {
     }
     $info += [
       'include_current' => TRUE,
+      'refresh_interval' => new \DateInterval('PT23H30M'),
     ];
     $one_month = new \DateInterval('P1M');
 
@@ -37,7 +40,7 @@ class Monthly implements FilePatternInterface {
       $end = $end->add($one_month);
     }
     $period = new \DatePeriod($start, $one_month, $end);
-    return new static($info['path'], $period);
+    return new static($info['path'], $period, $info['refresh_interval']);
   }
 
   /**
@@ -47,10 +50,13 @@ class Monthly implements FilePatternInterface {
    *   The path pattern in `strftime()`-format.
    * @param \DatePeriod $period
    *   A period capable for generating the start time for each month.
+   * @param \DateInterval $refresh_interval
+   *   The minimum interval that needs to pass between two builds of the file.
    */
-  public function __construct($path, \DatePeriod $period) {
+  public function __construct($path, \DatePeriod $period, \DateInterval $refresh_interval) {
     $this->pathPattern = $path;
     $this->period = $period;
+    $this->refreshInterval = $refresh_interval;
   }
 
   /**
@@ -68,7 +74,7 @@ class Monthly implements FilePatternInterface {
     $interval = new \DateInterval('P1M');
     foreach ($this->period as $start) {
       $path = strftime($this->pathPattern, $start->getTimestamp());
-      $file = new TimeframeFileInfo($root . '/' . $path, new Timeframe($start, $interval));
+      $file = new TimeframeFileInfo($root . '/' . $path, new Timeframe($start, $interval), $this->refreshInterval);
       $files[$path] = $file;
     }
     return $files;

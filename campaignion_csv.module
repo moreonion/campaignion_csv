@@ -20,6 +20,7 @@ function campaignion_csv_campaignion_csv_info() {
       'class' => Monthly::class,
       'path' => 'actions/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
     'exporter' => [
       'class' => WebformExporter::class,
@@ -33,6 +34,7 @@ function campaignion_csv_campaignion_csv_info() {
       'class' => Monthly::class,
       'path' => 'donations/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
     'exporter' => [
       'class' => WebformExporter::class,
@@ -46,6 +48,7 @@ function campaignion_csv_campaignion_csv_info() {
       'class' => Monthly::class,
       'path' => 'contacts/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
     'exporter' => [
       'class' => ContactExporter::class,
@@ -58,6 +61,7 @@ function campaignion_csv_campaignion_csv_info() {
       'class' => Monthly::class,
       'path' => 'activities/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
     'exporter' => [
       'class' => ActivityExporter::class,
