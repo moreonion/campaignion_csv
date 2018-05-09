@@ -2,6 +2,8 @@
 
 namespace Drupal\campaignion_csv;
 
+use Drupal\campaignion_csv\Exporter\ExporterFactory;
+
 /**
  * Manages exports in a directory.
  *
@@ -54,8 +56,7 @@ class DirectoryManager {
     foreach ($this->info as $info) {
       $class = $info['file_pattern']['class'];
       $file_pattern = $class::fromInfo($info['file_pattern']);
-      $class = $info['exporter']['factory_class'];
-      $factory = $class::fromInfo($info['exporter']);
+      $factory = ExporterFactory::fromInfo($info['exporter']);
       foreach ($file_pattern->expand($this->path) as $path => $file) {
         $file->setExporterFactory($factory);
         $this->files[$path] = $file;

@@ -14,13 +14,13 @@ class ActivityExporter {
   protected $dateFormat;
 
   /**
-   * Create a new exporter based on the timeframe and info.
+   * Create a new exporter based on the info.
    */
-  public function fromInfo(Timeframe $timeframe, array $info) {
+  public function fromInfo(array $info) {
     $info += [
       'date_format' => 'Y-m-d H:i:s',
     ];
-    return new static($timeframe, $info['date_format']);
+    return new static($info['timeframe'], $info['date_format']);
   }
 
   /**

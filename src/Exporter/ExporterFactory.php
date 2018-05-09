@@ -30,9 +30,9 @@ class ExporterFactory {
   /**
    * Instantiate the exporter.
    */
-  public function createExporter() {
+  public function createExporter(array $additional_info = []) {
     $class = $this->info['class'];
-    return $class::fromInfo($this->info);
+    return $class::fromInfo($additional_info + $this->info);
   }
 
 }

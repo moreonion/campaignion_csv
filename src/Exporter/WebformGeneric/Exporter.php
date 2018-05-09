@@ -51,18 +51,16 @@ class Exporter {
   /**
    * Create new instance based on timeframe and info.
    *
-   * @param \Drupal\campaignion_csv\Timeframe $timeframe
-   *   Export submissions within this timeframe.
    * @param array $info
    *   The exporter info array as defined campaignion_csv_info().
    */
-  public function fromInfo(Timeframe $timeframe, array $info) {
+  public function fromInfo(array $info) {
     $info += [
       'actions' => TRUE,
       'donations' => FALSE,
     ];
     $types = static::getContentTypes($info['actions'], $info['donations']);
-    return new static($timeframe, $types);
+    return new static($info['timeframe'], $types);
   }
 
   /**

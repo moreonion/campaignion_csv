@@ -50,7 +50,8 @@ class TimeframeFileInfo extends SingleFileInfo {
    * Create the exporter.
    */
   protected function createExporter() {
-    return $this->exporterFactory->createExporter($this->timeframe);
+    $info['timeframe'] = $this->timeframe;
+    return $this->exporterFactory->createExporter($info);
   }
 
 }
