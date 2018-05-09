@@ -3,6 +3,7 @@
 namespace Drupal\campaignion_csv\Files;
 
 use Drupal\campaignion_csv\Tests\ExporterFactoryStub;
+use Drupal\campaignion_csv\Timeframe;
 
 /**
  * Test the timeframe file info class.

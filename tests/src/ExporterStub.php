@@ -2,7 +2,7 @@
 
 namespace Drupal\campaignion_csv\Tests;
 
-use Drupal\campaignion_csv\CsvFile;
+use Drupal\campaignion_csv\Files\CsvFile;
 
 /**
  * Exporter that yields a pre-defined set of rows.
