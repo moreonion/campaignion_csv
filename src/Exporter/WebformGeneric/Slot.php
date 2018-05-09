@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\campaignion_csv\WebformGeneric;
+namespace Drupal\campaignion_csv\Exporter\WebformGeneric;
 
 use Drupal\little_helpers\Webform\Submission;
 

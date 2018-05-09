@@ -1,11 +1,13 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Files;
+
+use Drupal\campaignion_csv\Timeframe;
 
 /**
  * Timeframe based export file in the directory.
  */
-class TimeframeFileInfo extends \SplFileInfo implements ExportableFileInfoInterface {
+class TimeframeFileInfo extends \SplFileInfo implements ExportableInterface {
 
   protected $timeframe;
   protected $exporterFactory;

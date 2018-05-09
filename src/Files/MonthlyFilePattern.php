@@ -1,15 +1,13 @@
 <?php
 
-namespace Drupal\campaignion_csv\FilePattern;
+namespace Drupal\campaignion_csv\Files;
 
-use Drupal\campaignion_csv\FilePatternInterface;
-use Drupal\campaignion_csv\TimeframeFileInfo;
 use Drupal\campaignion_csv\Timeframe;
 
 /**
  * File pattern that creates monthly files.
  */
-class Monthly implements FilePatternInterface {
+class MonthlyFilePattern implements FilePatternInterface {
 
   /**
    * Create a new instance from an info-array.

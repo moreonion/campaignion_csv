@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Exporter;
 
-use Drupal\campaignion\ContactTypeManager;
+use Drupal\campaignion_csv\Files\CsvFile;
 
 /**
  * Export all redhen contacts.

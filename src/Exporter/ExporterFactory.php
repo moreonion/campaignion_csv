@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Exporter;
 
 /**
  * Simple info based exporter factory.

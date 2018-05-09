@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Files;
 
 /**
  * File pattern usable in the campaignion_csv_info() definitions.

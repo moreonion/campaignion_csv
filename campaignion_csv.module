@@ -5,13 +5,13 @@
  * Hook implementations and callbacks for the campaignion_csv mdule.
  */
 
-use Drupal\campaignion_csv\FilePattern\Monthly;
-use Drupal\campaignion_csv\FilePattern\SingleFile;
-use Drupal\campaignion_csv\WebformGeneric\Exporter as WebformExporter;
-use Drupal\campaignion_csv\ExporterFactory;
-use Drupal\campaignion_csv\TimeframeExporterFactory;
-use Drupal\campaignion_csv\ContactExporter;
-use Drupal\campaignion_csv\ActivityExporter;
+use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
+use Drupal\campaignion_csv\Exporter\ExporterFactory;
+use Drupal\campaignion_csv\Exporter\TimeframeExporterFactory;
+use Drupal\campaignion_csv\Exporter\ContactExporter;
+use Drupal\campaignion_csv\Exporter\ActivityExporter;
+use Drupal\campaignion_csv\Files\MonthlyFilePattern;
+use Drupal\campaignion_csv\Files\SingleFilePattern;
 
 /**
  * Implements hook_campaignion_csv_info().
@@ -19,7 +19,7 @@ use Drupal\campaignion_csv\ActivityExporter;
 function campaignion_csv_campaignion_csv_info() {
   $export['actions_monthly'] = [
     'file_pattern' => [
-      'class' => Monthly::class,
+      'class' => MonthlyFilePattern::class,
       'path' => 'actions/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
       'refresh_interval' => new \DateInterval('PT23H30M'),
@@ -33,7 +33,7 @@ function campaignion_csv_campaignion_csv_info() {
   ];
   $export['donations_monthly'] = [
     'file_pattern' => [
-      'class' => Monthly::class,
+      'class' => MonthlyFilePattern::class,
       'path' => 'donations/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
       'refresh_interval' => new \DateInterval('PT23H30M'),
@@ -47,7 +47,7 @@ function campaignion_csv_campaignion_csv_info() {
   ];
   $export['contacts'] = [
     'file_pattern' => [
-      'class' => SingleFile::class,
+      'class' => SingleFilePattern::class,
       'path' => 'contacts.csv',
       'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
@@ -59,7 +59,7 @@ function campaignion_csv_campaignion_csv_info() {
   ];
   $export['activities_monthly'] = [
     'file_pattern' => [
-      'class' => Monthly::class,
+      'class' => MonthlyFilePattern::class,
       'path' => 'activities/%Y-%m.csv',
       'retention_period' => new \DateInterval('P6M'),
       'refresh_interval' => new \DateInterval('PT23H30M'),

@@ -1,9 +1,8 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Files;
 
 use Drupal\campaignion_csv\Tests\ExporterFactoryStub;
-use Drupal\campaignion_csv\Tests\ExporterStub;
 
 /**
  * Test the timeframe file info class.

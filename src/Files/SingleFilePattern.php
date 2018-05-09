@@ -1,14 +1,11 @@
 <?php
 
-namespace Drupal\campaignion_csv\FilePattern;
-
-use Drupal\campaignion_csv\FilePatternInterface;
-use Drupal\campaignion_csv\SingleFileInfo;
+namespace Drupal\campaignion_csv\Files;
 
 /**
  * File pattern that creates a single file that’s updated regularly.
  */
-class SingleFile implements FilePatternInterface {
+class SingleFilePattern implements FilePatternInterface {
 
   /**
    * Create a new instance from an info-array.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Files;
 
 /**
  * Represents a single exportable file in then managed directory.
  */
-interface ExportableFileInfoInterface {
+interface ExportableInterface {
 
   /**
    * Create or update the file if needed.

@@ -1,8 +1,6 @@
 <?php
 
-namespace Drupal\campaignion_csv\WebformGeneric;
-
-use Drupa\little_helpers\Webform\Submission;
+namespace Drupal\campaignion_csv\Exporter\WebformGeneric;
 
 class ComponentExporter {
 

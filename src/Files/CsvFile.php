@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Files;
 
 /**
  * Write CSV to a file.

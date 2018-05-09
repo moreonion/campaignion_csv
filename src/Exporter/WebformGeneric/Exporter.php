@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\campaignion_csv\WebformGeneric;
+namespace Drupal\campaignion_csv\Exporter\WebformGeneric;
 
 use Drupal\little_helpers\Webform\Submission;
 use Drupal\campaignion_action\Loader;
-use Drupal\campaignion_csv\CsvFile;
+use Drupal\campaignion_csv\Files\CsvFile;
 use Drupal\campaignion_csv\Timeframe;
 
 $webform_path = drupal_get_path('module', 'webform');

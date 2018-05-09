@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Files;
 
 /**
  * A single file that’s updated regularly.
  */
-class SingleFileInfo extends \SplFileInfo implements ExportableFileInfoInterface {
+class SingleFileInfo extends \SplFileInfo implements ExportableInterface {
 
   protected $exporterFactory;
   protected $refreshInterval;

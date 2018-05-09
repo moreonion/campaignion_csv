@@ -1,6 +1,8 @@
 <?php
 
-namespace Drupal\campaignion_csv;
+namespace Drupal\campaignion_csv\Exporter;
+
+use Drupal\campaignion_csv\Timeframe;
 
 /**
  * Instantiate exporters based on a timeframe.

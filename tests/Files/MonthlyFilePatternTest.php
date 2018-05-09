@@ -1,8 +1,6 @@
 <?php
 
-namespace Drupal\campaignion_csv\FilePattern;
-
-use Drupal\campaignion_csv\TimeframeFileInfo;
+namespace Drupal\campaignion_csv\Files;
 
 class MonthlyFilePatternTest extends \DrupalUnitTestCase {
 
