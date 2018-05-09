@@ -7,14 +7,12 @@ use Drupal\campaignion_csv\Timeframe;
 /**
  * Timeframe based export file in the directory.
  */
-class TimeframeFileInfo extends \SplFileInfo implements ExportableInterface {
+class TimeframeFileInfo extends SingleFileInfo {
 
   protected $timeframe;
-  protected $exporterFactory;
-  protected $refreshInterval;
 
   /**
-   * Create a new instance based on a timeframe.
+   * Create a new instance.
    *
    * @param string $path
    *   Full path to the file (even if it does not yet exist).
@@ -24,38 +22,8 @@ class TimeframeFileInfo extends \SplFileInfo implements ExportableInterface {
    *   The minimum interval that needs to pass between two builds of the file.
    */
   public function __construct($path, Timeframe $timeframe, \DateInterval $refresh_interval) {
-    parent::__construct($path);
+    parent::__construct($path, $refresh_interval);
     $this->timeframe = $timeframe;
-    $this->refreshInterval = $refresh_interval;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setExporterFactory($factory) {
-    $this->exporterFactory = $factory;
-  }
-
-  /**
-   * Create the containing directory if needed.
-   */
-  protected function ensureDir() {
-    $dir_path = $this->getPath();
-    if (!is_dir($dir_path)) {
-      if (!drupal_mkdir($dir_path, NULL, TRUE)) {
-        throw new \RuntimeException("Unable to create directory: $dir_path");
-      }
-    }
-  }
-
-  /**
-   * Open the file as a CSV-file.
-   *
-   * @return \Drupal\campaignion_csv\CsvFile
-   *   The opened CSV-file.
-   */
-  public function openFile($open_mode = 'r', $use_include_path = FALSE, $context = NULL) {
-    return new CsvFile($this->getPathName(), $open_mode, $use_include_path, $context);
   }
 
   /**
@@ -79,14 +47,10 @@ class TimeframeFileInfo extends \SplFileInfo implements ExportableInterface {
   }
 
   /**
-   * Create or rebuild the file if needed.
+   * Create the exporter.
    */
-  public function update() {
-    if ($this->needsBuild()) {
-      $this->ensureDir();
-      $exporter = $this->exporterFactory->createExporter($this->timeframe);
-      $exporter->writeTo($this->openFile('w'));
-    }
+  protected function createExporter() {
+    return $this->exporterFactory->createExporter($this->timeframe);
   }
 
 }
