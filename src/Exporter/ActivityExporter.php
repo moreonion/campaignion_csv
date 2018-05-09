@@ -3,12 +3,19 @@
 namespace Drupal\campaignion_csv\Exporter;
 
 use Drupal\campaignion_csv\Files\CsvFile;
+use Drupal\campaignion_csv\Timeframe;
 
 /**
  * Export all redhen contacts.
  */
 class ActivityExporter {
 
+  protected $timeframe;
+  protected $dateFormat;
+
+  /**
+   * Create a new exporter based on the timeframe and info.
+   */
   public function fromInfo(Timeframe $timeframe, array $info) {
     $info += [
       'date_format' => 'Y-m-d H:i:s',
@@ -16,11 +23,25 @@ class ActivityExporter {
     return new static($timeframe, $info['date_format']);
   }
 
+  /**
+   * Create a new instance.
+   *
+   * @param \Drupal\campaignion_csv\Timeframe $timeframe
+   *   Export activities within this timeframe.
+   * @param string $date_format
+   *   Date format used when exporting.
+   */
   public function __construct(Timeframe $timeframe, $date_format) {
     $this->timeframe = $timeframe;
     $this->dateFormat = $date_format;
   }
 
+  /**
+   * Build a query to get all activity data for the timeframe.
+   *
+   * @return \SelectQueryInterface
+   *   The query.
+   */
   protected function buildQuery() {
     list($start, $end) = $this->timeframe->getTimestamps();
     $q = db_select('campaignion_activity', 'ca')
@@ -36,6 +57,9 @@ class ActivityExporter {
     return $q;
   }
 
+  /**
+   * Write the data to the CsvFile.
+   */
   public function writeTo(CsvFile $file) {
     $header = [
       'Activity ID',

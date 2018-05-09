@@ -21,6 +21,8 @@ class MonthlyFilePattern implements FilePatternInterface {
    *   - include_current: Whether the ongoing month should be included.
    *   - refresh_interval: A \DateInterval that defines how often files for the
    *     ongoing period are regenerated.
+   * @param \DateTimeInterface $now
+   *   The time considered to be now. Defaults to the date and time.
    */
   public static function fromInfo(array $info, \DateTimeInterface $now = NULL) {
     if (!$now) {

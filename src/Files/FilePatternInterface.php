@@ -12,6 +12,8 @@ interface FilePatternInterface {
    *
    * @param array $info
    *   The info-array as defined in hook_campaignion_csv_info().
+   * @param \DateTimeInterface $now
+   *   The time considered to be now. Defaults to the date and time.
    */
   public static function fromInfo(array $info, \DateTimeInterface $now = NULL);
 

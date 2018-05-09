@@ -6,18 +6,37 @@ use Drupal\campaignion\ContactTypeManager;
 use Drupal\campaignion_csv\Files\CsvFile;
 
 /**
- * Export all redhen contacts.
+ * Export all redhen contacts of a bundle.
+ *
+ * The export format is based on the `csv` exporter defined for the bundle.
  */
 class ContactExporter {
 
+  protected $bundle;
+
+  /**
+   * Create a new exporter based on the info array.
+   *
+   * @param array $info
+   *   Info-array as specified in hook_campaignion_csv_info().
+   */
   public function fromInfo(array $info) {
     return new static($info['bundle']);
   }
 
+  /**
+   * Create a new instance.
+   *
+   * @param string $bundle
+   *   The redhen_contact bundle that should be exported.
+   */
   public function __construct($bundle) {
     $this->bundle = $bundle;
   }
 
+  /**
+   * Generator: Iterate over all contacts of the bundle.
+   */
   protected function contacts() {
     $last_id = 0;
     while (TRUE) {
@@ -41,6 +60,9 @@ class ContactExporter {
     }
   }
 
+  /**
+   * Write exported contacts to a CsvFile.
+   */
   public function writeTo(CsvFile $file) {
     $exporter = ContactTypeManager::instance()
       ->exporter('csv', $this->bundle);

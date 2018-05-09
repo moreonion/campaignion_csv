@@ -47,13 +47,6 @@ class DirectoryManager {
   }
 
   /**
-   * Remove any files (and sub-directories) that are not managed by this module.
-   */
-  public function cleanup() {
-    //$it = new \RecursiveDirectoryIterator($this->path, \FileSystemIterator::SKIP_DOTS);
-  }
-
-  /**
    * Read the info from the info and instantiate the plugins.
    */
   protected function generateFiles() {

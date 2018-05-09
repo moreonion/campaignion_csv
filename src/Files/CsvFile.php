@@ -8,7 +8,9 @@ namespace Drupal\campaignion_csv\Files;
 class CsvFile extends \SplFileObject {
 
   /**
-   * Number of columns in the file.
+   * Number of columns in the file used to check later rows vs. the first row.
+   *
+   * @var int
    */
   protected $numberOfColumns = NULL;
 
@@ -18,8 +20,9 @@ class CsvFile extends \SplFileObject {
    * @param string[] $row
    *   Array of strings to print to the CSV.
    *
-   * @throws \InvalidArgumentException when the number of columns in the row
-   *   doesn’t match the number of columns in the first row.
+   * @throws \InvalidArgumentException
+   *   When the number of cells in the row doesn’t match the number of cells in
+   *   the first row an \InvalidArgumentException is thrown.
    */
   public function writeRow(array $row) {
     if (!isset($this->numberOfColumns)) {

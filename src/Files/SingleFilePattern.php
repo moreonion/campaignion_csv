@@ -16,6 +16,8 @@ class SingleFilePattern implements FilePatternInterface {
    *     is expanded using `strftime()`.
    *   - refresh_interval: A \DateInterval that defines how often the file
    *     updated.
+   * @param \DateTimeInterface $now
+   *   The time considered to be now. Defaults to the date and time.
    */
   public static function fromInfo(array $info, \DateTimeInterface $now = NULL) {
     $info += [

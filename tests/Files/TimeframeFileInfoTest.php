@@ -3,12 +3,11 @@
 namespace Drupal\campaignion_csv\Files;
 
 use Drupal\campaignion_csv\Tests\ExporterFactoryStub;
-use Drupal\campaignion_csv\Tests\ExporterStub;
 
 /**
  * Test the timeframe file info class.
  */
-class TimeframeFileInfoTest extends\DrupalUnitTestCase {
+class TimeframeFileInfoTest extends \DrupalUnitTestCase {
 
   /**
    * Create test file and prepare some test timeframes.

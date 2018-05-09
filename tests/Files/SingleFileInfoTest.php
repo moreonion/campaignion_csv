@@ -7,7 +7,7 @@ use Drupal\campaignion_csv\Tests\ExporterFactoryStub;
 /**
  * Test the timeframe file info class.
  */
-class SingleFileInfoTest extends\DrupalUnitTestCase {
+class SingleFileInfoTest extends \DrupalUnitTestCase {
 
   /**
    * Create test file.
