@@ -21,6 +21,7 @@ function campaignion_csv_cronapi() {
     'rule' => '0+@ 0 * * *',
     'weight' => 100,
     'callback' => 'campaignion_csv_cron',
+    'enabled' => FALSE,
   );
   return $items;
 }
