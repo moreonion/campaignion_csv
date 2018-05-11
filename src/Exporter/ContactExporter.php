@@ -20,7 +20,7 @@ class ContactExporter {
    * @param array $info
    *   Info-array as specified in hook_campaignion_csv_info().
    */
-  public function fromInfo(array $info) {
+  public static function fromInfo(array $info) {
     return new static($info['bundle']);
   }
 

@@ -16,7 +16,7 @@ class ActivityExporter {
   /**
    * Create a new exporter based on the info.
    */
-  public function fromInfo(array $info) {
+  public static function fromInfo(array $info) {
     $info += [
       'date_format' => 'Y-m-d H:i:s',
     ];

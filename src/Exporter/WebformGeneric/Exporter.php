@@ -54,7 +54,7 @@ class Exporter {
    * @param array $info
    *   The exporter info array as defined campaignion_csv_info().
    */
-  public function fromInfo(array $info) {
+  public static function fromInfo(array $info) {
     $info += [
       'actions' => TRUE,
       'donations' => FALSE,

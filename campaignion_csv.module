@@ -5,11 +5,32 @@
  * Hook implementations and callbacks for the campaignion_csv mdule.
  */
 
+use Drupal\campaignion_csv\DirectoryManager;
 use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\Exporter\ContactExporter;
 use Drupal\campaignion_csv\Exporter\ActivityExporter;
 use Drupal\campaignion_csv\Files\MonthlyFilePattern;
 use Drupal\campaignion_csv\Files\SingleFilePattern;
+
+/**
+ * Implements hook_cronapi().
+ */
+function campaignion_csv_cronapi() {
+  $items['campaignion_csv_cron'] = array(
+    'description' => 'Update exported files.',
+    'rule' => '0+@ 0 * * *',
+    'weight' => 100,
+    'callback' => 'campaignion_csv_cron',
+  );
+  return $items;
+}
+
+/**
+ * Cron callback: Update exported files.
+ */
+function campaignion_csv_cron() {
+  DirectoryManager::fromConfig()->build();
+}
 
 /**
  * Implements hook_campaignion_csv_info().
