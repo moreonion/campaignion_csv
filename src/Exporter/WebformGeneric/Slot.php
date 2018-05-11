@@ -19,7 +19,7 @@ class Slot {
    *   The unique ID for this slot.
    */
   public function __construct($slot_id) {
-    $this->slot_id = $id;
+    $this->slot_id = $slot_id;
   }
 
   /**

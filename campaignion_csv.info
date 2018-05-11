@@ -3,4 +3,5 @@ description = Provide pre-generated CSV exports for the campaignion submissions 
 core = 7.x
 php = 5.4
 dependencies[] = campaignion_action
+dependencies[] = little_helpers
 dependencies[] = variable

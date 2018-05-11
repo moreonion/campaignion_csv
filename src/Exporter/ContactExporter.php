@@ -69,7 +69,6 @@ class ContactExporter {
     $file->writeRow($exporter->header(0));
     $file->writeRow($exporter->header(1));
     foreach ($this->contacts() as $contact) {
-      $row = [];
       $exporter->setContact($contact);
       $file->writeRow($exporter->row());
     }
