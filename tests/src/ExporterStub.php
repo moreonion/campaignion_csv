@@ -27,7 +27,12 @@ class ExporterStub {
    */
   public function writeTo(CsvFile $file) {
     foreach ($this->rows as $row) {
-      $file->writeRow($row);
+      if (is_array($row)) {
+        $file->writeRow($row);
+      }
+      elseif ($row instanceof \Exception || $row instanceof \Throwable) {
+        throw $row;
+      }
     }
   }
 
