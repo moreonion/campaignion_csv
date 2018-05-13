@@ -6,9 +6,10 @@
  */
 
 use Drupal\campaignion_csv\DirectoryManager;
-use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
-use Drupal\campaignion_csv\Exporter\ContactExporter;
 use Drupal\campaignion_csv\Exporter\ActivityExporter;
+use Drupal\campaignion_csv\Exporter\ContactExporter;
+use Drupal\campaignion_csv\Exporter\OptInExporter;
+use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\Files\MonthlyFilePattern;
 use Drupal\campaignion_csv\Files\SingleFilePattern;
 
@@ -83,6 +84,30 @@ function campaignion_csv_campaignion_csv_info() {
     ],
     'exporter' => [
       'class' => ActivityExporter::class,
+    ],
+  ];
+  $export['opt_ins'] = [
+    'file_pattern' => [
+      'class' => MonthlyFilePattern::class,
+      'path' => 'opt-ins/%Y-%m.csv',
+      'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
+    ],
+    'exporter' => [
+      'class' => OptInExporter::class,
+      'opt_in' => TRUE,
+    ],
+  ];
+  $export['opt_outs'] = [
+    'file_pattern' => [
+      'class' => MonthlyFilePattern::class,
+      'path' => 'opt-outs/%Y-%m.csv',
+      'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
+    ],
+    'exporter' => [
+      'class' => OptInExporter::class,
+      'opt_in' => FALSE,
     ],
   ];
   return $export;
