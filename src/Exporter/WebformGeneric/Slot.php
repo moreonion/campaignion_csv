@@ -11,6 +11,7 @@ class Slot {
 
   protected $id;
   protected $components;
+  protected $rowLength;
 
   /**
    * Create new slot.
@@ -56,6 +57,7 @@ class Slot {
     }
     $header[] = [[$this->slot_id]];
     $header = $this->normalizeRowLength($header);
+    $this->rowLength = count($header[0]);
     foreach ($header as $row_num => $row) {
       foreach ($row as $col_num => $cell_candidates) {
         $header[$row_num][$col_num] = implode(' / ', $cell_candidates);
@@ -104,8 +106,7 @@ class Slot {
       return $this->components[$nid]->csvRow($submission);
     }
     else {
-      // @TODO: This should conform to the slot width.
-      return [''];
+      return array_fill(0, $this->rowLength, '');
     }
   }
 
