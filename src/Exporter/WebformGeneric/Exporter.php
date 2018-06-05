@@ -82,6 +82,9 @@ class Exporter {
    */
   protected function getSubmissions() {
     $nids = array_keys($this->nodes);
+    if (!$nids) {
+      return;
+    }
     list($start, $end) = $this->timeframe->getTimeStamps();
     $result = db_select('webform_submissions', 's')
       ->fields('s', ['nid', 'sid'])
