@@ -55,10 +55,10 @@ class OptInExporter {
     list($start, $end) = $this->timeframe->getTimestamps();
     $q = db_select('campaignion_activity', 'ca')
       ->fields('ca', ['contact_id', 'created']);
-    $q->leftJoin('campaignion_opt_in', 'o', 'o.activity_id=ca.activity_id');
+    $q->innerJoin('campaignion_opt_in', 'o', 'o.activity_id=ca.activity_id');
     $q->fields('o', ['id', 'channel', 'statement']);
     $q->condition('ca.created', [$start, $end - 1], 'BETWEEN');
-    $q->condition('o.operation', $this->optin ? 1 : 0);
+    $q->condition('o.operation', $this->optIn ? 1 : 0);
     $q->orderBy('o.id');
     return $q;
   }
