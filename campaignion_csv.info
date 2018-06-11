@@ -6,4 +6,5 @@ dependencies[] = campaignion_action
 dependencies[] = campaignion_activity
 dependencies[] = campaignion_opt_in
 dependencies[] = little_helpers
+dependencies[] = redhen_contact
 dependencies[] = variable

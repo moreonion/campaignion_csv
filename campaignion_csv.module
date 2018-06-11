@@ -10,8 +10,8 @@ use Drupal\campaignion_csv\Exporter\ActivityExporter;
 use Drupal\campaignion_csv\Exporter\ContactExporter;
 use Drupal\campaignion_csv\Exporter\OptInExporter;
 use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
+use Drupal\campaignion_csv\Files\ContactRangeFilePattern;
 use Drupal\campaignion_csv\Files\MonthlyFilePattern;
-use Drupal\campaignion_csv\Files\SingleFilePattern;
 
 /**
  * Implements hook_cronapi().
@@ -66,8 +66,10 @@ function campaignion_csv_campaignion_csv_info() {
   ];
   $export['contacts'] = [
     'file_pattern' => [
-      'class' => SingleFilePattern::class,
-      'path' => 'contacts.csv',
+      'class' => ContactRangeFilePattern::class,
+      'bundle' => 'contact',
+      'contacts_per_file' => 100000,
+      'path' => 'contacts/%03d.csv',
       'refresh_interval' => new \DateInterval('PT23H30M'),
     ],
     'exporter' => [

@@ -28,7 +28,7 @@ before_script:
   - ln -s $repo test-root/sites/all/modules/campaignion_csv
   - cd test-root
   - root=`pwd`
-  - drush dl campaignion ctools little_helpers psr0 variable views webform webform_template
+  - drush dl campaignion ctools little_helpers psr0 redhen variable views webform webform_template
   - drush --yes pm-enable campaignion_csv
 
 script:

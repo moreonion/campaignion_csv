@@ -13,6 +13,7 @@ use Drupal\campaignion_csv\Files\CsvFile;
 class ContactExporter {
 
   protected $bundle;
+  protected $range;
 
   /**
    * Create a new exporter based on the info array.
@@ -21,7 +22,7 @@ class ContactExporter {
    *   Info-array as specified in hook_campaignion_csv_info().
    */
   public static function fromInfo(array $info) {
-    return new static($info['bundle']);
+    return new static($info['bundle'], $info['range']);
   }
 
   /**
@@ -29,9 +30,12 @@ class ContactExporter {
    *
    * @param string $bundle
    *   The redhen_contact bundle that should be exported.
+   * @param int[] $range
+   *   Contact ID range for this export.
    */
-  public function __construct($bundle) {
+  public function __construct($bundle, array $range) {
     $this->bundle = $bundle;
+    $this->range = $range;
   }
 
   /**
@@ -39,11 +43,15 @@ class ContactExporter {
    */
   protected function contacts() {
     $last_id = 0;
+    $count = 0;
+    list($min_id, $max_id) = $this->range;
     while (TRUE) {
       $contact_ids = db_select('redhen_contact', 'c')
         ->fields('c', ['contact_id'])
         ->condition('type', $this->bundle)
         ->condition('contact_id', $last_id, '>')
+        ->condition('contact_id', $min_id, '>=')
+        ->condition('contact_id', $max_id, '<')
         ->orderBy('contact_id')
         ->range(0, 100)
         ->execute()
