@@ -36,7 +36,9 @@ class SingleFileInfo extends CsvFileInfo {
     if (!$this->isFile()) {
       return TRUE;
     }
-    return $this->refreshInterval->format('s') < time() - $this->getMTime();
+    $t = new \DateTime();
+    $t->sub($this->refreshInterval);
+    return $t->getTimestamp() > $this->getMTime();
   }
 
 }
