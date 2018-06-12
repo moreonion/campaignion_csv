@@ -127,16 +127,34 @@ class Exporter {
    *   The download options for the submission’s node.
    * @param int $row_count
    *   The number of the current row.
+   * @param array $submission_info_cols
+   *   Data from an earlier call to
+   *   webform_results_download_submission_information().
+   *
+   * @return array
+   *   Submission information data for the submission keyed by token.
    */
-  protected function submissionInformationData(Submission $submission, array $options, $row_count) {
-    $data = module_invoke_all('webform_results_download_submission_information_data', $submission, $options, 0, $row_count);
-    $context = [
-      'submission' => $submission,
-      'options' => $options,
-      'serial_start' => 0,
-      'row_count' => $row_count,
-    ];
-    drupal_alter('webform_results_download_submission_information_data', $data, $context);
+  protected function submissionInformationData(Submission $submission, array $options, $row_count, array $submission_info_cols) {
+      $context = [
+        'submission' => $submission,
+        'options' => $options,
+        'serial_start' => 0,
+        'row_count' => $row_count,
+      ];
+    // Check whether this is a patched version of webform.
+    $patched = !isset(webform_theme()['webform_results_table_header']);
+    if ($patched) {
+      $data = module_invoke_all('webform_results_download_submission_information_data', $submission, $options, 0, $row_count);
+      drupal_alter('webform_results_download_submission_information_data', $data, $context);
+    }
+    else {
+      foreach (array_keys($submission_info_cols) as $token) {
+        $cell = module_invoke_all('webform_results_download_submission_information_data', $token, $submission, $options, 0, $row_count);
+        drupal_alter('webform_results_download_submission_information_data', $cell, $context);
+        // Merge multiple values into one if more than one module responds.
+        $data['token'] = implode(', ', $cell);
+      }
+    }
     return $data;
   }
 
@@ -191,7 +209,7 @@ class Exporter {
 
       if ($row_num == 2) {
         $row = array_map(function ($x) {
-          return $x['title'];
+          return is_array($x) ? $x['title'] : $x;
         }, $submission_info_cols);
       }
       else {
@@ -211,7 +229,7 @@ class Exporter {
       $row = [];
 
       // Add submission information.
-      $data = $this->submissionInformationData($submission, $options, $row_count);
+      $data = $this->submissionInformationData($submission, $options, $row_count, $submission_info_cols);
       foreach (array_keys($submission_info_cols) as $token) {
         $row[] = isset($data[$token]) ? $data[$token] : '';
       }
