@@ -15,6 +15,7 @@ class SingleFileInfoTest extends \DrupalUnitTestCase {
   public function setUp() {
     parent::setUp();
     $this->path = tempnam(sys_get_temp_dir(), __FUNCTION__);
+    touch($this->path, time() - 900);
   }
 
   /**
