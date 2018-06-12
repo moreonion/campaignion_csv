@@ -73,7 +73,7 @@ class ContactRangeFilePattern implements FilePatternInterface {
     while ($range_start <= $max_id) {
       $path = sprintf($this->pathPattern, $i++);
       $range_end = $range_start + $this->contactsPerFile;
-      $files[$path] = new ContactRangeFileInfo($root . '/' . $path, $this->bundle, [$range_start, $range_end], $this->refreshInterval);
+      $files[$path] = new ContactRangeFileInfo($root . '/' . $path, [$range_start, $range_end], $this->refreshInterval);
       $range_start = $range_end;
     }
     return $files;
