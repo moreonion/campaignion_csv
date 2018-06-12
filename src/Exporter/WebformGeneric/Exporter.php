@@ -150,6 +150,7 @@ class Exporter {
     $options = [];
     foreach ($this->nodes as $node) {
       $options[$node->nid] = [
+        'type' => 'download',
         'select_format' => 'compact',
         'select_keys' => TRUE,
       ] + webform_results_download_default_options($node, 'delimited');
