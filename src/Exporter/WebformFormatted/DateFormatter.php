@@ -5,7 +5,7 @@ namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 /**
  * Format a unix timestamp.
  */
-class DateFormatter {
+class DateFormatter implements FormatterInterface {
 
   /**
    * Create a new instance from an info-array.

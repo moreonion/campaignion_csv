@@ -7,7 +7,7 @@ use Drupal\little_helpers\Webform\Submission;
 /**
  * Select values from a webform submission using the `form_key`.
  */
-class FormKeySelector {
+class FormKeySelector implements SelectorInterface {
 
   protected $keys;
 

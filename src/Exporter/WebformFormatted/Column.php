@@ -38,11 +38,11 @@ class Column {
    *
    * @param string $label
    *   Column header for this column.
-   * @param mixed $selector
+   * @param \Drupal\campaignion_csv\Exporter\WebformFormatted\SelectorInterface $selector
    *   Value selector.
-   * @param array $transformers
+   * @param \Drupal\campaignion_csv\Exporter\WebformFormatted\TransformerInterface[] $transformers
    *   Value transformers.
-   * @param mixed $formatter
+   * @param \Drupal\campaignion_csv\Exporter\WebformFormatted\FormatterInterface $formatter
    *   Formatter for this cell.
    */
   public function __construct($label, $selector, array $transformers, $formatter) {

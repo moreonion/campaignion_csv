@@ -5,7 +5,7 @@ namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 /**
  * Transform values using a mapping.
  */
-class MapTransformer {
+class MapTransformer implements TransformerInterface {
 
   /**
    * Create a new instance from an info-array.

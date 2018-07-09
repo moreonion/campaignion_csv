@@ -7,7 +7,7 @@ use Drupal\little_helpers\Webform\Submission;
 /**
  * Select webform submission values based on their column-type.
  */
-class ComponentTypeSelector {
+class ComponentTypeSelector implements SelectorInterface {
 
   protected $type;
 

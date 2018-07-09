@@ -7,7 +7,7 @@ use Drupal\little_helpers\Webform\Submission;
 /**
  * Select one of the submission properties.
  */
-class SubmissionPropertySelector {
+class SubmissionPropertySelector implements SelectorInterface {
 
   protected $property;
 

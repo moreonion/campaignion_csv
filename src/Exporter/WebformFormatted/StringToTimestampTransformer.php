@@ -5,7 +5,7 @@ namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 /**
  * Convert a string formatted date to a timestamp.
  */
-class StringToTimestampTransformer {
+class StringToTimestampTransformer implements TransformerInterface {
 
   /**
    * Create a new instance from an info-array.
