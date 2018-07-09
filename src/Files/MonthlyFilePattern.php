@@ -30,7 +30,6 @@ class MonthlyFilePattern implements FilePatternInterface {
     }
     $info += [
       'include_current' => TRUE,
-      'refresh_interval' => new \DateInterval('PT23H30M'),
     ];
     $one_month = new \DateInterval('P1M');
 
@@ -40,7 +39,7 @@ class MonthlyFilePattern implements FilePatternInterface {
       $end = $end->add($one_month);
     }
     $period = new \DatePeriod($start, $one_month, $end);
-    return new static($info['path'], $period, $info['refresh_interval']);
+    return new static($info['path'], $period, $info);
   }
 
   /**
@@ -50,13 +49,13 @@ class MonthlyFilePattern implements FilePatternInterface {
    *   The path pattern in `strftime()`-format.
    * @param \DatePeriod $period
    *   A period capable for generating the start time for each month.
-   * @param \DateInterval $refresh_interval
-   *   The minimum interval that needs to pass between two builds of the file.
+   * @param array $info
+   *   Info-array that’s simply passed on to the FileInfo objects.
    */
-  public function __construct($path, \DatePeriod $period, \DateInterval $refresh_interval) {
+  public function __construct($path, \DatePeriod $period, array $info) {
     $this->pathPattern = $path;
     $this->period = $period;
-    $this->refreshInterval = $refresh_interval;
+    $this->info = $info;
   }
 
   /**
@@ -74,8 +73,11 @@ class MonthlyFilePattern implements FilePatternInterface {
     $interval = new \DateInterval('P1M');
     foreach ($this->period as $start) {
       $path = strftime($this->pathPattern, $start->getTimestamp());
-      $file = new TimeframeFileInfo($root . '/' . $path, new Timeframe($start, $interval), $this->refreshInterval);
-      $files[$path] = $file;
+      $info = [
+        'path' => $root . '/' . $path,
+        'timeframe' => new Timeframe($start, $interval),
+      ] + $this->info;
+      $files[$path] = TimeFrameFileInfo::fromInfo($info);
     }
     return $files;
   }

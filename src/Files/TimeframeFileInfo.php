@@ -10,6 +10,17 @@ use Drupal\campaignion_csv\Timeframe;
 class TimeframeFileInfo extends SingleFileInfo {
 
   protected $timeframe;
+  protected $info;
+
+  /**
+   * Create new instance from an info array.
+   */
+  public static function fromInfo(array $info) {
+    $info += [
+      'refresh_interval' => new \DateInterval('PT23H30M'),
+    ];
+    return new static($info['path'], $info['timeframe'], $info['refresh_interval'], $info);
+  }
 
   /**
    * Create a new instance.
@@ -20,10 +31,13 @@ class TimeframeFileInfo extends SingleFileInfo {
    *   The timeframe for which data should be exported.
    * @param \DateInterval $refresh_interval
    *   The minimum interval that needs to pass between two builds of the file.
+   * @param array $info
+   *   Extra info to pass on to the exporter.
    */
-  public function __construct($path, Timeframe $timeframe, \DateInterval $refresh_interval) {
+  public function __construct($path, Timeframe $timeframe, \DateInterval $refresh_interval, $info = []) {
     parent::__construct($path, $refresh_interval);
     $this->timeframe = $timeframe;
+    $this->info = $info;
   }
 
   /**
@@ -50,6 +64,7 @@ class TimeframeFileInfo extends SingleFileInfo {
    * Create the exporter.
    */
   protected function createExporter() {
+    $info = $this->info;
     $info['timeframe'] = $this->timeframe;
     return $this->exporterFactory->createExporter($info);
   }
