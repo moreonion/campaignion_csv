@@ -19,7 +19,6 @@ class Column {
     $info += [
       'selector' => FormKeySelector::class,
       'transformers' => [],
-      'formatter' => NoopFormatter::class,
     ];
     $class = $info['selector'];
     $selector = $class::fromInfo($info);
@@ -28,9 +27,7 @@ class Column {
       $class = $tinfo['class'];
       $transformers[] = $class::fromInfo($tinfo);
     }
-    $class = $info['formatter'];
-    $formatter = $class::fromInfo($info);
-    return new static($info['label'], $selector, $transformers, $formatter);
+    return new static($info['label'], $selector, $transformers);
   }
 
   /**
@@ -42,14 +39,11 @@ class Column {
    *   Value selector.
    * @param \Drupal\campaignion_csv\Exporter\WebformFormatted\TransformerInterface[] $transformers
    *   Value transformers.
-   * @param \Drupal\campaignion_csv\Exporter\WebformFormatted\FormatterInterface $formatter
-   *   Formatter for this cell.
    */
-  public function __construct($label, $selector, array $transformers, $formatter) {
+  public function __construct($label, $selector, array $transformers) {
     $this->label = $label;
     $this->selector = $selector;
     $this->transformers = $transformers;
-    $this->formatter = $formatter;
   }
 
   /**
@@ -59,7 +53,8 @@ class Column {
    *   - The selector reads the value from the submission object.
    *   - An arbitrary number of transformers modify the values usually
    *     transforming it into a standardised format. (optional)
-   *   - The formatter then creates the output for the CSV.
+   *
+   * The last transformer should then return a string value.
    *
    * @param \Drupal\little_helpers\Webform\Submission $submission
    *   The webform submission to read the data from.
@@ -72,7 +67,7 @@ class Column {
     foreach ($this->transformers as $transformer) {
       $value = $transformer->transform($value);
     }
-    return $this->formatter->format($value);
+    return $value;
   }
 
 }

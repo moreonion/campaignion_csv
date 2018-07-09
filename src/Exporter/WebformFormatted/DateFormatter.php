@@ -5,7 +5,7 @@ namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 /**
  * Format a unix timestamp.
  */
-class DateFormatter implements FormatterInterface {
+class DateFormatter implements TransformerInterface {
 
   /**
    * Create a new instance from an info-array.
@@ -38,7 +38,7 @@ class DateFormatter implements FormatterInterface {
    * @return string
    *   The formatted date/time or an empty string if an empty value was given.
    */
-  public function format($value) {
+  public function transform($value) {
     if ($value) {
       return strftime($this->format, $value);
     }
