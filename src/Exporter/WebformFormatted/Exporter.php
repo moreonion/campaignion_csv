@@ -94,7 +94,11 @@ class Exporter {
       ->orderBy('sid')
       ->execute();
     foreach ($result as $row) {
-      yield Submission::load($row->nid, $row->sid);
+      $submission = Submission::load($row->nid, $row->sid);
+      if (!$submission->data) {
+        continue;
+      }
+      yield $submission;
       drupal_static_reset('webform_get_submission');
     }
   }
