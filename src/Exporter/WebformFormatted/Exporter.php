@@ -95,7 +95,8 @@ class Exporter {
       ->execute();
     foreach ($result as $row) {
       $submission = Submission::load($row->nid, $row->sid);
-      if (!$submission->data) {
+      // Skip empty submissions and submissions without email address.
+      if (!$submission->data || !$submission->valueByKey('email')) {
         continue;
       }
       yield $submission;
