@@ -77,7 +77,7 @@ class MonthlyFilePattern implements FilePatternInterface {
         'path' => $root . '/' . $path,
         'timeframe' => new Timeframe($start, $interval),
       ] + $this->info;
-      $files[$path] = TimeFrameFileInfo::fromInfo($info);
+      $files[$path] = TimeframeFileInfo::fromInfo($info);
     }
     return $files;
   }
