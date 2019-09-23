@@ -12,8 +12,9 @@ class MonthlyFilePatternTest extends \DrupalUnitTestCase {
    */
   public function testExpandKeysArePaths() {
     $pattern = 'a/%Y-%m';
-    $period = new \DatePeriod(new \DateTimeImmutable('2018-01-01'), new \DateInterval('P1M'), new \DateTimeImmutable('2018-04-01'));
-    $file_pattern = new MonthlyFilePattern($pattern, $period, []);
+    $interval = new \DateInterval('P1M');
+    $period = new \DatePeriod(new \DateTimeImmutable('2018-01-01'), $interval, new \DateTimeImmutable('2018-04-01'));
+    $file_pattern = new MonthlyFilePattern($pattern, $period, $interval, []);
     $this->assertEqual([
       'a/2018-01',
       'a/2018-02',
@@ -27,8 +28,9 @@ class MonthlyFilePatternTest extends \DrupalUnitTestCase {
    */
   public function testExpandReturnsFiles() {
     $pattern = 'a/%Y-%m';
-    $period = new \DatePeriod(new \DateTimeImmutable('2018-01-01'), new \DateInterval('P1M'), new \DateTimeImmutable('2018-04-01'));
-    $file_pattern = new MonthlyFilePattern($pattern, $period, []);
+    $interval = new \DateInterval('P1M');
+    $period = new \DatePeriod(new \DateTimeImmutable('2018-01-01'), $interval, new \DateTimeImmutable('2018-04-01'));
+    $file_pattern = new MonthlyFilePattern($pattern, $period, $interval, []);
     $files = $file_pattern->expand('/root');
     $this->assertCount(3, $files);
     $this->assertContainsOnlyInstancesOf(TimeframeFileInfo::class, $files);

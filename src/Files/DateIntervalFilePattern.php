@@ -43,7 +43,7 @@ class DateIntervalFilePattern implements FilePatternInterface {
       $end = $end->add($interval);
     }
     $period = new \DatePeriod($start, $interval, $end);
-    return new static($info['path'], $period, $info);
+    return new static($info['path'], $period, $interval, $info);
   }
 
   /**
@@ -53,12 +53,15 @@ class DateIntervalFilePattern implements FilePatternInterface {
    *   The path pattern in `strftime()`-format.
    * @param \DatePeriod $period
    *   A period capable for generating the start time for each month.
+   * @param \DateInterval $interval
+   *   The time interval covered by a single file.
    * @param array $info
    *   Info-array that’s simply passed on to the FileInfo objects.
    */
-  public function __construct($path, \DatePeriod $period, array $info) {
+  public function __construct($path, \DatePeriod $period, \DateInterval $interval, array $info) {
     $this->pathPattern = $path;
     $this->period = $period;
+    $this->interval = $interval;
     $this->info = $info;
   }
 
@@ -74,7 +77,7 @@ class DateIntervalFilePattern implements FilePatternInterface {
    */
   public function expand($root) {
     $files = [];
-    $interval = $this->info['interval'];
+    $interval = $this->interval;
     foreach ($this->period as $start) {
       $path = strftime($this->pathPattern, $start->getTimestamp());
       $info = [
