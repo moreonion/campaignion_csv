@@ -51,7 +51,7 @@ class ActivityExporter {
     $q->leftJoin('campaignion_activity_payment', 'cap', 'ca.activity_id=cap.activity_id');
     $q->fields('cap', ['pid']);
     $q->leftJoin('campaignion_activity_newsletter_subscription', 'cans', 'ca.activity_id=cans.activity_id');
-    $q->fields('cans', ['action', 'from_provider', 'optin_statement']);
+    $q->fields('cans', ['action', 'from_provider']);
     $q->condition('ca.created', [$start, $end - 1], 'BETWEEN');
     $q->orderBy('ca.activity_id');
     return $q;
@@ -73,7 +73,6 @@ class ActivityExporter {
       'List ID',
       'List action',
       'from provider',
-      'Opt-In statement',
     ];
     $file->writeRow($header);
 
@@ -90,7 +89,6 @@ class ActivityExporter {
         $r->list_id,
         $r->action,
         $r->from_provider,
-        $r->optin_statement,
       ];
       $file->writeRow($row);
     }
