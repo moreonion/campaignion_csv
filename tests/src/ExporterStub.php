@@ -2,7 +2,7 @@
 
 namespace Drupal\campaignion_csv\Tests;
 
-use Drupal\campaignion_csv\Files\CsvFile;
+use Drupal\campaignion_csv\Files\CsvFileInterface;
 
 /**
  * Exporter that yields a pre-defined set of rows.
@@ -22,10 +22,10 @@ class ExporterStub {
   /**
    * Write the rows to a file.
    *
-   * @param \Drupal\campaignion_csv\Files\CsvFile $file
+   * @param \Drupal\campaignion_csv\Files\CsvFileInterface $file
    *   The target file.
    */
-  public function writeTo(CsvFile $file) {
+  public function writeTo(CsvFileInterface $file) {
     foreach ($this->rows as $row) {
       if (is_array($row)) {
         $file->writeRow($row);

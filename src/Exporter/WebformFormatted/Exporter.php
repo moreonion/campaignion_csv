@@ -3,7 +3,7 @@
 namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 
 use Drupal\campaignion_csv\Timeframe;
-use Drupal\campaignion_csv\Files\CsvFile;
+use Drupal\campaignion_csv\Files\CsvFileInterface;
 use Drupal\little_helpers\Webform\Submission;
 
 /**
@@ -107,7 +107,7 @@ class Exporter {
   /**
    * Write submission files to the CsvFile.
    */
-  public function writeTo(CsvFile $file) {
+  public function writeTo(CsvFileInterface $file) {
     $row = array_map(function ($v) {
       return $v->label;
     }, $this->columns);

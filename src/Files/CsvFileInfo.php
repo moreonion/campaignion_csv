@@ -29,23 +29,6 @@ class CsvFileInfo extends \SplFileInfo implements ExportableInterface {
   }
 
   /**
-   * Create temporary file for exporting.
-   */
-  protected function temporaryFile($open_mode = 'r', $use_include_path = FALSE, $context = NULL) {
-    $path = tempnam(sys_get_temp_dir(), 'csv-export');
-    return new CsvFile($path, $open_mode, $use_include_path, $context);
-  }
-
-  /**
-   * Move temporary file to the destination.
-   */
-  protected function moveToDestination(CsvFile $tmp_file) {
-    $path = $tmp_file->getPathName();
-    copy($path, $this->getPathName());
-    unlink($path);
-  }
-
-  /**
    * Open the file as a CSV-file.
    *
    * @return \Drupal\campaignion_csv\CsvFile
@@ -73,9 +56,9 @@ class CsvFileInfo extends \SplFileInfo implements ExportableInterface {
   public function update() {
     if ($this->needsBuild()) {
       $this->ensureDir();
-      $tmp_file = $this->temporaryFile('w');
+      $tmp_file = new CsvTempFile();
       $this->createExporter()->writeTo($tmp_file);
-      $this->moveToDestination($tmp_file);
+      $tmp_file->dumpInto($this->openFile('w'));
     }
   }
 
