@@ -33,7 +33,8 @@ class ExporterTest extends \DrupalUnitTestCase {
       'name' => 'First name',
       'form_key' => 'first_name',
     ];
-    foreach ($this->node->webform['components'] as &$component) {
+    foreach ($this->node->webform['components'] as $cid => &$component) {
+      $component['cid'] = $cid;
       webform_component_defaults($component);
     }
     node_save($this->node);
@@ -58,7 +59,7 @@ class ExporterTest extends \DrupalUnitTestCase {
    * Test exporting the submissions.
    */
   public function testWriteTo() {
-    $start = (new \DateTimeImmutable())->modify('-2 hours');
+    $start = (new \DateTimeImmutable())->modify('-1 minute');
     $length = new \DateInterval('PT4H');
     $info['timeframe'] = new Timeframe($start, $length);
     $info['actions'] = TRUE;
@@ -72,15 +73,19 @@ class ExporterTest extends \DrupalUnitTestCase {
     while ($row = $read_file->fgetcsv()) {
       $rows[] = $row;
     }
+
     $this->assertCount(6, $rows);
-    $this->assertEqual('Email', $rows[2][10]);
-    $this->assertEqual('First name', $rows[2][11]);
-
-    $this->assertEqual('email', $rows[3][10]);
-    $this->assertEqual('first_name', $rows[3][11]);
-
-    $this->assertEqual('test@example.com', $rows[4][10]);
-    $this->assertEqual('Foo', $rows[4][11]);
+    $this->assertEqual([
+      'Email',
+      'First name',
+    ], array_slice($rows[2], -2));
+    $this->assertEqual([
+      'email',
+      'first_name',
+    ], array_slice($rows[3], -2));
+    $fields = array_combine($rows[3], $rows[4]);
+    $this->assertEqual('test@example.com', $fields['email']);
+    $this->assertEqual('Foo', $fields['first_name']);
   }
 
 }
