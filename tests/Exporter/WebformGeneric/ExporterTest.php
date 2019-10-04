@@ -73,14 +73,14 @@ class ExporterTest extends \DrupalUnitTestCase {
       $rows[] = $row;
     }
     $this->assertCount(6, $rows);
-    $this->assertEqual('Email', $rows[2][9]);
-    $this->assertEqual('First name', $rows[2][10]);
+    $this->assertEqual('Email', $rows[2][10]);
+    $this->assertEqual('First name', $rows[2][11]);
 
-    $this->assertEqual('email', $rows[3][9]);
-    $this->assertEqual('first_name', $rows[3][10]);
+    $this->assertEqual('email', $rows[3][10]);
+    $this->assertEqual('first_name', $rows[3][11]);
 
-    $this->assertEqual('test@example.com', $rows[4][9]);
-    $this->assertEqual('Foo', $rows[4][10]);
+    $this->assertEqual('test@example.com', $rows[4][10]);
+    $this->assertEqual('Foo', $rows[4][11]);
   }
 
 }
