@@ -3,7 +3,7 @@
 namespace Drupal\campaignion_csv\Exporter;
 
 use Drupal\campaignion\ContactTypeManager;
-use Drupal\campaignion_csv\Files\CsvFile;
+use Drupal\campaignion_csv\Files\CsvFileInterface;
 
 /**
  * Export all redhen contacts of a bundle.
@@ -71,7 +71,7 @@ class ContactExporter {
   /**
    * Write exported contacts to a CsvFile.
    */
-  public function writeTo(CsvFile $file) {
+  public function writeTo(CsvFileInterface $file) {
     $exporter = ContactTypeManager::instance()
       ->exporter('csv', $this->bundle);
     $file->writeRow($exporter->header(0));

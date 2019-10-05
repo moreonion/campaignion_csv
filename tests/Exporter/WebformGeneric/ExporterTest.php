@@ -33,7 +33,8 @@ class ExporterTest extends \DrupalUnitTestCase {
       'name' => 'First name',
       'form_key' => 'first_name',
     ];
-    foreach ($this->node->webform['components'] as &$component) {
+    foreach ($this->node->webform['components'] as $cid => &$component) {
+      $component['cid'] = $cid;
       webform_component_defaults($component);
     }
     node_save($this->node);

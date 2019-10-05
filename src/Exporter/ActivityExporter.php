@@ -2,7 +2,7 @@
 
 namespace Drupal\campaignion_csv\Exporter;
 
-use Drupal\campaignion_csv\Files\CsvFile;
+use Drupal\campaignion_csv\Files\CsvFileInterface;
 use Drupal\campaignion_csv\Timeframe;
 
 /**
@@ -60,7 +60,7 @@ class ActivityExporter {
   /**
    * Write the data to the CsvFile.
    */
-  public function writeTo(CsvFile $file) {
+  public function writeTo(CsvFileInterface $file) {
     $header = [
       'Activity ID',
       'Contact ID',
