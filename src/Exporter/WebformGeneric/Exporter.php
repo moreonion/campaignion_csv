@@ -140,6 +140,7 @@ class Exporter {
         'options' => $options,
         'serial_start' => 0,
         'row_count' => $row_count,
+        'multiple_nodes' => TRUE,
       ];
     // Check whether this is a patched version of webform.
     $patched = !isset(webform_theme()['webform_results_table_header']);

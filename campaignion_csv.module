@@ -114,3 +114,53 @@ function campaignion_csv_campaignion_csv_info() {
   ];
   return $export;
 }
+
+/**
+ * Implements hook_webform_results_download_submission_information_info_alter().
+ *
+ * Add a NID column right before the SID column.
+ */
+function campaignion_csv_webform_results_download_submission_information_info_alter(array &$info, $node = NULL, $options = NULL) {
+  if (!$options || !empty($options['multiple_nodes'])) {
+    $index = array_search('webform_sid', array_keys($info));
+    $columns['webform_nid'] = t('NID');
+    $info = array_slice($info, 0, $index) + $columns + array_slice($info, $index);
+  }
+}
+
+/**
+ * Implements hook_webform_results_download_submission_information_data().
+ */
+function campaignion_csv_webform_results_download_submission_information_data() {
+  $args = func_get_args();
+  $fn = __FUNCTION__;
+  // Do we have a patched version of webform?
+  $impl = is_string($args[0]) ? "_{$fn}" : "{$fn}_row";
+  return call_user_func_array($impl, $args);
+}
+
+/**
+ * Implements hook_webform_results_download_submission_information_data_row().
+ *
+ * This hook is invoked if
+ * @link https://www.drupal.org/project/webform/issues/3086038 #3086038 @endlink
+ * is applied.
+ */
+function campaignion_csv_webform_results_download_submission_information_data_row($submission, array $options, $serial_start, $row_count) {
+  $data['webform_nid'] = $submission->nid;
+  return $data;
+}
+
+/**
+ * Implements hook_webform_results_download_submission_information_data().
+ *
+ * This is the implementation for unpatched webform versions. It can be replaced
+ * with a version dependency once there is a webform release featuring the new
+ * hook.
+ */
+function _campaignion_csv_webform_results_download_submission_information_data($token, $submission, array $options, $serial_start, $row_count) {
+  switch ($token) {
+    case 'webform_nid':
+      return $submission->nid;
+  }
+}
