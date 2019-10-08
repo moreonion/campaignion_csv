@@ -135,13 +135,12 @@ class Exporter {
    *   Submission information data for the submission keyed by token.
    */
   protected function submissionInformationData(Submission $submission, array $options, $row_count, array $submission_info_cols) {
-      $context = [
-        'submission' => $submission,
-        'options' => $options,
-        'serial_start' => 0,
-        'row_count' => $row_count,
-        'multiple_nodes' => TRUE,
-      ];
+    $context = [
+      'submission' => $submission,
+      'options' => $options,
+      'serial_start' => 0,
+      'row_count' => $row_count,
+    ];
     // Check whether this is a patched version of webform.
     $patched = !isset(webform_theme()['webform_results_table_header']);
     if ($patched) {
@@ -172,6 +171,8 @@ class Exporter {
         'type' => 'download',
         'select_format' => 'compact',
         'select_keys' => TRUE,
+        'multiple_nodes' => TRUE,
+        'components' => NULL,
       ] + webform_results_download_default_options($node, 'delimited');
     }
     return $options;
