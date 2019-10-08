@@ -73,6 +73,7 @@ class ExporterTest extends \DrupalUnitTestCase {
     while ($row = $read_file->fgetcsv()) {
       $rows[] = $row;
     }
+    $this->assertEqual(['Serial', 'NID', 'SID'], array_slice($rows[2], 0, 3));
 
     $this->assertCount(6, $rows);
     $this->assertEqual([
