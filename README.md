@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/moreonion/campaignion_csv.svg?branch=7.x-1.x)](https://travis-ci.org/moreonion/campaignion_csv) [![codecov](https://codecov.io/gh/moreonion/campaignion_csv/branch/7.x-1.x/graph/badge.svg)](https://codecov.io/gh/moreonion/campaignion_csv)
+
 # Campaignion CSV exports
 
 This module manages pre-generated CSV exports in a specially designated folder.
