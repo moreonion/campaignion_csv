@@ -1,0 +1,13 @@
+name = campaignion_csv_test
+description = Test hook implementations and plugins for campaignion_csv.
+core = 7.x
+hidden = TRUE
+package = Test
+dependencies[] = entity
+dependencies[] = features
+dependencies[] = redhen_contact
+dependencies[] = redhen_fields
+features[features_api][] = api:2
+features[field_base][] = redhen_contact_email
+features[field_instance][] = redhen_contact-contact-redhen_contact_email
+features[redhen_contact_type][] = contact
