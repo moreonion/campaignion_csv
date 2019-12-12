@@ -22,7 +22,11 @@ class ContactExporter {
    *   Info-array as specified in hook_campaignion_csv_info().
    */
   public static function fromInfo(array $info) {
-    return new static($info['bundle'], $info['range']);
+    $info += [
+      'bundle' => 'contact',
+      'exporter' => 'csv',
+    ];
+    return new static($info['bundle'], $info['range'], $info['exporter']);
   }
 
   /**
@@ -32,10 +36,13 @@ class ContactExporter {
    *   The redhen_contact bundle that should be exported.
    * @param int[] $range
    *   Contact ID range for this export.
+   * @param string $exporter
+   *   The exporter format to use for this contact export.
    */
-  public function __construct($bundle, array $range) {
+  public function __construct($bundle, array $range, $exporter = 'csv') {
     $this->bundle = $bundle;
     $this->range = $range;
+    $this->exporter = $exporter;
   }
 
   /**
@@ -73,7 +80,7 @@ class ContactExporter {
    */
   public function writeTo(CsvFileInterface $file) {
     $exporter = ContactTypeManager::instance()
-      ->exporter('csv', $this->bundle);
+      ->exporter($this->exporter, $this->bundle);
     $file->writeRow($exporter->header(0));
     $file->writeRow($exporter->header(1));
     foreach ($this->contacts() as $contact) {
