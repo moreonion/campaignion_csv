@@ -25,8 +25,9 @@ class ContactExporter {
     $info += [
       'bundle' => 'contact',
       'exporter' => 'csv',
+      'header_rows' => 2,
     ];
-    return new static($info['bundle'], $info['range'], $info['exporter']);
+    return new static($info['bundle'], $info['range'], $info['exporter'], $info['header_rows']);
   }
 
   /**
@@ -38,11 +39,14 @@ class ContactExporter {
    *   Contact ID range for this export.
    * @param string $exporter
    *   The exporter format to use for this contact export.
+   * @param int $header_rows
+   *   Number of header lines that should be produced.
    */
-  public function __construct($bundle, array $range, $exporter = 'csv') {
+  public function __construct($bundle, array $range, $exporter = 'csv', $header_rows = 2) {
     $this->bundle = $bundle;
     $this->range = $range;
     $this->exporter = $exporter;
+    $this->headerRows = $header_rows;
   }
 
   /**
@@ -81,8 +85,9 @@ class ContactExporter {
   public function writeTo(CsvFileInterface $file) {
     $exporter = ContactTypeManager::instance()
       ->exporter($this->exporter, $this->bundle);
-    $file->writeRow($exporter->header(0));
-    $file->writeRow($exporter->header(1));
+    for ($row = 0; $row < $this->headerRows; $row++) {
+      $file->writeRow($exporter->header($row));
+    }
     foreach ($this->contacts() as $contact) {
       $exporter->setContact($contact);
       $file->writeRow($exporter->row());
