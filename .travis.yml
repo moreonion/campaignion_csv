@@ -25,7 +25,7 @@ before_script:
   - cd $root
   - ln -s $repo sites/all/modules/module_under_test
   - drush dl redhen campaignion ctools psr0 views webform
-  - drush --yes pm-enable campaignion_csv
+  - drush --yes pm-enable campaignion_csv campaignion_csv_test
 
 script:
   - cd $repo

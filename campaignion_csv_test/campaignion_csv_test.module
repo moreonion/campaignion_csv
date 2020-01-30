@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Code for the campaignion_csv_test feature.
+ */
+
+include_once 'campaignion_csv_test.features.inc';
+
+/**
+ * Implements hook_campaignion_contact_info().
+ */
+function campaignion_csv_test_campaignion_contact_type_info() {
+  $types['contact'] = '\\Drupal\\campaignion_csv_test\\Contact';
+  return $types;
+}

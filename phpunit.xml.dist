@@ -19,6 +19,7 @@
     <directory suffix=".inc">.</directory>
     <directory suffix=".module">.</directory>
     <exclude>
+      <directory>./campaignion_csv_test</directory>
       <directory suffix="Test.php">.</directory>
       <directory suffix=".api.php">.</directory>
       <directory suffix=".tpl.php">.</directory>
