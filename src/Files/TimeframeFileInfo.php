@@ -55,7 +55,9 @@ class TimeframeFileInfo extends SingleFileInfo {
     if ($mtime < $end) {
       // The interval was still ongoing the last time the file was generated.
       // We regenerate the file if the refresh interval has passed since then.
-      return $this->refreshInterval->format('s') < time() - $mtime;
+      $t = new \DateTime();
+      $t->sub($this->refreshInterval);
+      return $t->getTimestamp() > $mtime;
     }
     return FALSE;
   }

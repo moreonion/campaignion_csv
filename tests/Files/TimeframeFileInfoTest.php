@@ -16,6 +16,7 @@ class TimeframeFileInfoTest extends \DrupalUnitTestCase {
   public function setUp() {
     parent::setUp();
     $this->path = tempnam(sys_get_temp_dir(), __FUNCTION__);
+    touch($this->path, time() - 5);
     $today = new \DateTimeImmutable((new \DateTime())->format('Y-m-d'));
     $this->todayIncludingNow = new Timeframe($today, new \DateInterval('PT25H'));
     $this->yesterday = new Timeframe($today->sub(new \DateInterval('P1D')), new \DateInterval('PT24H'));
