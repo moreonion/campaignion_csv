@@ -2,7 +2,6 @@
 
 namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 
-use Drupal\campaignion_opt_in\Values;
 use Drupal\little_helpers\Webform\Submission;
 
 /**
@@ -44,13 +43,7 @@ class OptInChannelSelector implements SelectorInterface {
    *   The first non-NULL value for this submission or NULL if none was found.
    */
   public function value(Submission $submission) {
-    foreach ($submission->webform->componentsByType('opt_in') as $cid => $component) {
-      $value = $submission->valueByCid($cid);
-      if (!is_null($value) && $component['extra']['channel'] == $this->channel) {
-        return Values::removePrefix($value);
-      }
-    }
-    return NULL;
+    return $submission->opt_in->canonicalValue($this->channel, TRUE);
   }
 
 }
