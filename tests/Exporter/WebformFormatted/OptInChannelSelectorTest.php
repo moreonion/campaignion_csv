@@ -2,6 +2,7 @@
 
 namespace Drupal\campaignion_csv\Exporter\WebformFormatted;
 
+use Drupal\campaignion_opt_in\Values;
 use Drupal\little_helpers\Webform\Submission;
 
 require_once drupal_get_path('module', 'webform') . '/includes/webform.components.inc';
@@ -38,6 +39,7 @@ class OptInChannelSelectorTest extends \DrupalUnitTestCase {
       3 => ['radios:opt-out'],
     ];
     $submission = new Submission($node, $submission);
+    $submission->opt_in = new Values($submission);
 
     $one = new OptInChannelSelector('one');
     $this->assertEqual('opt-in', $one->value($submission));
