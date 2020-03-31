@@ -37,7 +37,7 @@ class Exporter {
     $nids = $q->groupBy('nid')
       ->execute()
       ->fetchCol();
-    return entity_load('node', $nids);
+    return $nids ? entity_load('node', $nids) : [];
   }
 
   /**
