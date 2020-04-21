@@ -56,7 +56,7 @@ class Slot {
       }
     }
     $header[] = [[$this->slot_id]];
-    $header = $this->normalizeRowLength($header);
+    $header = $this->normalizeHeaders($header);
     $this->rowLength = count($header[0]);
     foreach ($header as $row_num => $row) {
       foreach ($row as $col_num => $cell_candidates) {
@@ -67,28 +67,43 @@ class Slot {
   }
 
   /**
-   * Fill all of sub-arrays so that they have the same number of items.
+   * Normalize length of the header rows.
    *
    * @param array[] $rows
    *   The arrays to fill.
-   * @param mixed $fill
-   *   The fill value.
    *
    * @return array[]
    *   The input-array with all sub-arrays filled to the maximum sub-array
    *   length.
    */
-  protected function normalizeRowLength(array $rows, $fill = []) {
+  protected function normalizeHeaders(array $rows) {
     $count = function ($x) {
       return count($x);
     };
-    $max_cols = max(array_map($count, $rows));
+    $this->rowLength = max(array_map($count, $rows));
+    return array_map([$this, 'cutAndFillRow'], $rows);
+  }
 
-    $fill_row = function ($x) use ($max_cols, $fill) {
-      $c = count($x);
-      return array_merge($x, array_fill(0, $max_cols - $c, $fill));
-    };
-    return array_map($fill_row, $rows);
+  /**
+   * Fill or cut a row to the standard length.
+   *
+   * @param array $row
+   *   Array to fill.
+   * @param mixed $fill
+   *   The value used to append.
+   *
+   * @return array
+   *   The array filled up or cut to $this->rowLength items.
+   */
+  protected function cutAndFillRow(array $row, $fill = []) {
+    $n = $this->rowLength - count($row);
+    if ($n == 0) {
+      return $row;
+    }
+    if ($n > 0) {
+      return array_merge($row, array_fill(0, $n, $fill));
+    }
+    return array_slice($row, 0, $this->rowLength);
   }
 
   /**
@@ -102,12 +117,8 @@ class Slot {
    */
   public function row(Submission $submission) {
     $nid = $submission->nid;
-    if (isset($this->components[$nid])) {
-      return $this->components[$nid]->csvRow($submission);
-    }
-    else {
-      return array_fill(0, $this->rowLength, '');
-    }
+    $row = ($c = $this->components[$nid] ?? NULL) ? $c->csvRow($submission) : [];
+    return $this->cutAndFillRow($row, '');
   }
 
 }
