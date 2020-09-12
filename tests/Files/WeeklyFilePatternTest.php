@@ -48,7 +48,6 @@ class WeeklyFilePatternTest extends \DrupalUnitTestCase {
     $now = new \DateTimeImmutable('2020-08-20');
     $file_pattern = WeeklyFilePattern::fromInfo($info, $now);
     $this->assertEqual([
-      'a/2020-07-27',
       'a/2020-08-03',
       'a/2020-08-10',
     ], array_keys($file_pattern->expand('/root')));
@@ -66,10 +65,56 @@ class WeeklyFilePatternTest extends \DrupalUnitTestCase {
     $now = new \DateTimeImmutable('2020-08-20');
     $file_pattern = WeeklyFilePattern::fromInfo($info, $now);
     $this->assertEqual([
+      'a/2020-08-03',
+      'a/2020-08-10',
+      'a/2020-08-17',
+    ], array_keys($file_pattern->expand('/root')));
+  }
+
+  /**
+   * Test a retention period that can’t be expressed in weeks.
+   */
+  public function testFromInfoNonWeeklyRetention() {
+    $info = [
+      'path' => 'a/%Y-%m-%d',
+      'retention_period' => new \DateInterval('P2M'),
+      'include_current' => TRUE,
+    ];
+    $now = new \DateTimeImmutable('2020-08-20');
+    $file_pattern = WeeklyFilePattern::fromInfo($info, $now);
+    $this->assertEqual([
+      'a/2020-06-22',
+      'a/2020-06-29',
+      'a/2020-07-06',
+      'a/2020-07-13',
+      'a/2020-07-20',
       'a/2020-07-27',
       'a/2020-08-03',
       'a/2020-08-10',
       'a/2020-08-17',
+    ], array_keys($file_pattern->expand('/root')));
+  }
+
+  /**
+   * Test with now on monday.
+   */
+  public function testOnMonday() {
+    $info = [
+      'path' => 'a/%Y-%m-%d',
+      'retention_period' => new \DateInterval('P2M'),
+      'include_current' => FALSE,
+    ];
+    $now = new \DateTimeImmutable('2020-08-17');
+    $file_pattern = WeeklyFilePattern::fromInfo($info, $now);
+    $this->assertEqual([
+      'a/2020-06-22',
+      'a/2020-06-29',
+      'a/2020-07-06',
+      'a/2020-07-13',
+      'a/2020-07-20',
+      'a/2020-07-27',
+      'a/2020-08-03',
+      'a/2020-08-10',
     ], array_keys($file_pattern->expand('/root')));
   }
 

@@ -32,7 +32,7 @@ class WeeklyFilePattern extends DateIntervalFilePattern {
     $interval = new \DateInterval('P1W');
 
     $end = $now->modify('+1 day')->modify('last monday')->setTime(0, 0, 0, 0);
-    $start = $end->sub($info['retention_period']);
+    $start = $now->sub($info['retention_period'])->modify('-1 day')->modify('next monday')->setTime(0, 0, 0, 0);
     if ($info['include_current']) {
       $end = $end->add($interval);
     }
