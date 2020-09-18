@@ -14,4 +14,11 @@ class NestedPayment extends NestedData {
     return $this->data->getStatus();
   }
 
+  /**
+   * Get the total amount of a payment.
+   */
+  public function totalAmount() {
+    return $this->data->totalAmount(TRUE);
+  }
+
 }
