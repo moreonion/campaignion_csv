@@ -21,4 +21,20 @@ class SubmissionPropertySelectorTest extends \DrupalUnitTestCase {
     $this->assertEqual('', $user->value($submission));
   }
 
+  /**
+   * Test that getting overloaded properties of a nested payment works.
+   */
+  public function testPaymentStatus() {
+    $node = (object) ['webform' => ['components' => []]];
+    $submission = (object) ['data' => []];
+    $payment = new \Payment([
+      'pid' => 1,
+    ]);
+    $submission->payments = [1 => $payment];
+    $submission = new Submission($node, $submission);
+
+    $status = new SubmissionPropertySelector('payment.status.status');
+    $this->assertEqual('payment_status_new', $status->value($submission));
+  }
+
 }

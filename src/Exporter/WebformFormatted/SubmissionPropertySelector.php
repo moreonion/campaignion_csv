@@ -44,34 +44,8 @@ class SubmissionPropertySelector implements SelectorInterface {
    *   The property value.
    */
   public function value(Submission $submission) {
-    $payments = $submission->payments ?? [];
-    return static::deepGet($submission, explode('.', $this->property), [
-      'payment' => reset($payments),
-      'user' => user_load($submission->uid ?? 0),
-    ]);
-  }
-
-  /**
-   * Helper function that recursively resolves nested data structures.
-   */
-  protected static function deepGet($data, array $path_parts, array $special = []) {
-    $part = array_shift($path_parts);
-    if (array_key_exists($part, $special)) {
-      // Values might be NULL.
-      $data = $special[$part];
-    }
-    else {
-      $data = $data->$part ?? NULL;
-    }
-    if ($path_parts) {
-      // No need to use static:: when calling the method itself: Overriding the
-      // method means the call is overridden too.
-      // Special values are only valid for the top layer.
-      return self::deepGet($data, $path_parts);
-    }
-    else {
-      return $data;
-    }
+    $nested = new NestedSubmission($submission);
+    return $nested->_valueByPath($this->property);
   }
 
 }

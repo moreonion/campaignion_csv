@@ -51,39 +51,10 @@ class PaymentPropertySelector implements SelectorInterface {
     // overloaded property.
     $payments = $submission->payments ?? [];
     if ($payment = reset($payments)) {
-      return static::deepGet($payment, explode('.', $this->property), [
-        'status' => $payment->getStatus(),
-      ]);
+      $nested = new NestedPayment($payment);
+      return $nested->_valueByPath($this->property);
     }
     return NULL;
-  }
-
-  /**
-   * Helper function that recursively resolves nested data structures.
-   */
-  protected static function deepGet($data, array $path_parts, array $special = []) {
-    $part = array_shift($path_parts);
-    if (array_key_exists($part, $special)) {
-      // Values might be NULL.
-      $data = $special[$part];
-    }
-    else {
-      if (is_array($data)) {
-        $data = $data[$part] ?? NULL;
-      }
-      else {
-        $data = $data->{$part} ?? NULL;
-      }
-    }
-    if ($path_parts && $data) {
-      // No need to use static:: when calling the method itself: Overriding the
-      // method means the call is overridden too.
-      // Special values are only valid for the top layer.
-      return self::deepGet($data, $path_parts);
-    }
-    else {
-      return $data;
-    }
   }
 
 }
