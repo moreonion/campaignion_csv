@@ -5,6 +5,7 @@ hidden = TRUE
 package = Test
 dependencies[] = entity
 dependencies[] = features
+dependencies[] = payment:payment
 dependencies[] = redhen_contact
 dependencies[] = redhen_fields
 features[features_api][] = api:2

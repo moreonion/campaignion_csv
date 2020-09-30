@@ -44,12 +44,8 @@ class SubmissionPropertySelector implements SelectorInterface {
    *   The property value.
    */
   public function value(Submission $submission) {
-    $property = $this->property;
-    if (substr($property, 0, 5) == 'node.') {
-      $property = substr($property, 5);
-      return $submission->node->{$property};
-    }
-    return $submission->{$property};
+    $nested = new NestedSubmission($submission);
+    return $nested->_valueByPath($this->property);
   }
 
 }

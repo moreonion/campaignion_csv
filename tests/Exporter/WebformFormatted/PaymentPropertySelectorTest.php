@@ -15,11 +15,11 @@ class PaymentPropertySelectorTest extends \DrupalUnitTestCase {
   public function testValue() {
     $node = (object) ['webform' => ['components' => []]];
     $submission = (object) ['data' => []];
-    $payment = (object) [
+    $payment = new \Payment([
       'pid' => 1,
       'method_data' => ['account' => '12345'],
       'method' => (object) ['name' => 'direct_debit'],
-    ];
+    ]);
     $submission->payments = [1 => $payment];
     $submission = new Submission($node, $submission);
 
@@ -31,6 +31,9 @@ class PaymentPropertySelectorTest extends \DrupalUnitTestCase {
 
     $other = new PaymentPropertySelector('method.name');
     $this->assertEqual($payment->method->name, $other->value($submission));
+
+    $status = new PaymentPropertySelector('status.status');
+    $this->assertEqual('payment_status_new', $status->value($submission));
   }
 
 }
