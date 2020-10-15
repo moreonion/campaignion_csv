@@ -49,7 +49,7 @@ class PaymentPropertySelector implements SelectorInterface {
     // Get the data from the first paymethod select component.
     // Don’t call reset($submission->payments) directly. This doesn’t work on an
     // overloaded property.
-    $payments = $submission->payments ?? [];
+    $payments = array_filter($submission->payments ?? []);
     if ($payment = reset($payments)) {
       $nested = new NestedPayment($payment);
       return $nested->_valueByPath($this->property);

@@ -30,7 +30,7 @@ class SubmissionPropertySelectorTest extends \DrupalUnitTestCase {
     $payment = new \Payment([
       'pid' => 1,
     ]);
-    $submission->payments = [1 => $payment];
+    $submission->payments = [0 => NULL, 1 => $payment];
     $submission = new Submission($node, $submission);
 
     $status = new SubmissionPropertySelector('payment.status.status');

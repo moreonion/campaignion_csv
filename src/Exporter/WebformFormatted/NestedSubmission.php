@@ -11,7 +11,7 @@ class NestedSubmission extends NestedData {
    * Fetch the first (and most likely) only payment object.
    */
   public function payment() {
-    $payments = $this->data->payments ?? [];
+    $payments = array_filter($this->data->payments ?? []);
     $payment = reset($payments);
     return $payment ? new NestedPayment($payment) : $payment;
   }

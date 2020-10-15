@@ -20,7 +20,7 @@ class PaymentPropertySelectorTest extends \DrupalUnitTestCase {
       'method_data' => ['account' => '12345'],
       'method' => (object) ['name' => 'direct_debit'],
     ]);
-    $submission->payments = [1 => $payment];
+    $submission->payments = [0 => NULL, 1 => $payment];
     $submission = new Submission($node, $submission);
 
     $one = PaymentPropertySelector::fromInfo([]);
