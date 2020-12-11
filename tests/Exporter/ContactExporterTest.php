@@ -15,7 +15,7 @@ class ContactExporterTest extends DrupalUnitTestCase {
   /**
    * Prepare webform with an email and textfield component plus one submission.
    */
-  public function setUp() {
+  public function setUp() : void {
     parent::setUp();
     $this->path = tempnam(sys_get_temp_dir(), 'contact-export-test');
     $this->contact = Contact::fromEmail('test@example.com');
@@ -25,7 +25,7 @@ class ContactExporterTest extends DrupalUnitTestCase {
   /**
    * Delete the webform node.
    */
-  public function tearDown() {
+  public function tearDown() : void {
     $this->contact->delete();
     unlink($this->path);
   }
