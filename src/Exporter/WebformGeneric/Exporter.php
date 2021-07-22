@@ -144,8 +144,8 @@ class Exporter {
     // Check whether this is a patched version of webform.
     $patched = !isset(webform_theme()['webform_results_table_header']);
     if ($patched) {
-      $data = module_invoke_all('webform_results_download_submission_information_data', $submission, $options, 0, $row_count);
-      drupal_alter('webform_results_download_submission_information_data', $data, $context);
+      $data = module_invoke_all('webform_results_download_submission_information_data_row', $submission, $options, 0, $row_count);
+      drupal_alter('webform_results_download_submission_information_data_row', $data, $context);
     }
     else {
       foreach (array_keys($submission_info_cols) as $token) {
