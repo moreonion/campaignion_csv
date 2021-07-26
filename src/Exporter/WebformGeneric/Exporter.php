@@ -152,7 +152,7 @@ class Exporter {
         $cell = module_invoke_all('webform_results_download_submission_information_data', $token, $submission, $options, 0, $row_count);
         drupal_alter('webform_results_download_submission_information_data', $cell, $context);
         // Merge multiple values into one if more than one module responds.
-        $data['token'] = implode(', ', $cell);
+        $data[$token] = implode(', ', $cell);
       }
     }
     return $data;
