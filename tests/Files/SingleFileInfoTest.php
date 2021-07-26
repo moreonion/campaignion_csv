@@ -12,7 +12,7 @@ class SingleFileInfoTest extends \DrupalUnitTestCase {
   /**
    * Create test file.
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->path = tempnam(sys_get_temp_dir(), __FUNCTION__);
     touch($this->path, time() - 900);
@@ -21,7 +21,7 @@ class SingleFileInfoTest extends \DrupalUnitTestCase {
   /**
    * Remove test file.
    */
-  public function tearDown() {
+  public function tearDown(): void {
     unlink($this->path);
     parent::tearDown();
   }

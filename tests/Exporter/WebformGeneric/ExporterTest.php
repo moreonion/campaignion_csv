@@ -16,7 +16,7 @@ class ExporterTest extends \DrupalUnitTestCase {
   /**
    * Prepare webform with an email and textfield component plus one submission.
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->node = (object) [
       'type' => 'webform',
@@ -50,7 +50,7 @@ class ExporterTest extends \DrupalUnitTestCase {
   /**
    * Delete the webform node.
    */
-  public function tearDown() {
+  public function tearDown(): void {
     node_delete($this->node->nid);
     unlink($this->path);
   }
