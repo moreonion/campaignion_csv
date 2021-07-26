@@ -129,17 +129,6 @@ function campaignion_csv_webform_results_download_submission_information_info_al
 }
 
 /**
- * Implements hook_webform_results_download_submission_information_data().
- */
-function campaignion_csv_webform_results_download_submission_information_data() {
-  $args = func_get_args();
-  $fn = __FUNCTION__;
-  // Do we have a patched version of webform?
-  $impl = is_string($args[0]) ? "_{$fn}" : "{$fn}_row";
-  return call_user_func_array($impl, $args);
-}
-
-/**
  * Implements hook_webform_results_download_submission_information_data_row().
  *
  * This hook is invoked if
@@ -158,7 +147,7 @@ function campaignion_csv_webform_results_download_submission_information_data_ro
  * with a version dependency once there is a webform release featuring the new
  * hook.
  */
-function _campaignion_csv_webform_results_download_submission_information_data($token, $submission, array $options, $serial_start, $row_count) {
+function campaignion_csv_webform_results_download_submission_information_data($token, $submission, array $options, $serial_start, $row_count) {
   switch ($token) {
     case 'webform_nid':
       return $submission->nid;
