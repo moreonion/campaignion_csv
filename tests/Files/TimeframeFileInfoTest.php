@@ -13,7 +13,7 @@ class TimeframeFileInfoTest extends \DrupalUnitTestCase {
   /**
    * Create test file and prepare some test timeframes.
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     $this->path = tempnam(sys_get_temp_dir(), __FUNCTION__);
     touch($this->path, time() - 5);
@@ -25,7 +25,7 @@ class TimeframeFileInfoTest extends \DrupalUnitTestCase {
   /**
    * Remove test file.
    */
-  public function tearDown() {
+  public function tearDown(): void {
     unlink($this->path);
     parent::tearDown();
   }
