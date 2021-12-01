@@ -50,8 +50,6 @@ class ActivityExporter {
     $q->fields('caw', ['nid', 'sid', 'confirmed']);
     $q->leftJoin('campaignion_activity_payment', 'cap', 'ca.activity_id=cap.activity_id');
     $q->fields('cap', ['pid']);
-    $q->leftJoin('campaignion_activity_newsletter_subscription', 'cans', 'ca.activity_id=cans.activity_id');
-    $q->fields('cans', ['action', 'from_provider']);
     $q->condition('ca.created', [$start, $end - 1], 'BETWEEN');
     $q->orderBy('ca.activity_id');
     return $q;
@@ -70,9 +68,6 @@ class ActivityExporter {
       'sid',
       'Confirmation Time',
       'pid',
-      'List ID',
-      'List action',
-      'from provider',
     ];
     $file->writeRow($header);
 
@@ -86,9 +81,6 @@ class ActivityExporter {
         $r->sid,
         $r->confirmed ? format_date($r->confirmed, 'custom', $this->dateFormat) : '',
         $r->pid,
-        $r->list_id,
-        $r->action,
-        $r->from_provider,
       ];
       $file->writeRow($row);
     }
