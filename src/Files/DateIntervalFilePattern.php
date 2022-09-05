@@ -66,6 +66,15 @@ class DateIntervalFilePattern implements FilePatternInterface {
   }
 
   /**
+   * Iterate over all configured timeframes.
+   */
+  public function iterateTimeframes() {
+    foreach ($this->period as $start) {
+      yield new Timeframe($start, $this->interval);
+    }
+  }
+
+  /**
    * Expand the file pattern and create the specfic files.
    *
    * @param string $root
@@ -77,12 +86,12 @@ class DateIntervalFilePattern implements FilePatternInterface {
    */
   public function expand($root) {
     $files = [];
-    $interval = $this->interval;
-    foreach ($this->period as $start) {
-      $path = strftime($this->pathPattern, $start->getTimestamp());
+    foreach ($this->iterateTimeframes() as $timeframe) {
+      list($start, $end) = $timeframe->getTimestamps();
+      $path = strftime($this->pathPattern, $start);
       $info = [
         'path' => $root . '/' . $path,
-        'timeframe' => new Timeframe($start, $interval),
+        'timeframe' => $timeframe,
       ] + $this->info;
       $files[$path] = TimeframeFileInfo::fromInfo($info);
     }
