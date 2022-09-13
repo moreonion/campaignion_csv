@@ -9,9 +9,12 @@ use Drupal\campaignion_csv\DirectoryManager;
 use Drupal\campaignion_csv\Exporter\ActivityExporter;
 use Drupal\campaignion_csv\Exporter\ContactExporter;
 use Drupal\campaignion_csv\Exporter\OptInExporter;
+use Drupal\campaignion_csv\Exporter\TargetStatsExporter;
 use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\Files\ContactRangeFilePattern;
 use Drupal\campaignion_csv\Files\MonthlyFilePattern;
+use Drupal\campaignion_csv\Files\NodeQueryFilePattern;
+use Drupal\campaignion_csv\Files\YearlyFilePattern;
 
 /**
  * Implements hook_cronapi().
@@ -110,6 +113,18 @@ function campaignion_csv_campaignion_csv_info() {
     'exporter' => [
       'class' => OptInExporter::class,
       'opt_in' => FALSE,
+    ],
+  ];
+  $export['target_message_count'] = [
+    'file_pattern' => [
+      'class' => NodeQueryFilePattern::class,
+      'date_pattern_class' => YearlyFilePattern::class,
+      'path' => 'targets/node!nid-%Y.csv',
+      'retention_period' => new \DateInterval('P24M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
+    ],
+    'exporter' => [
+      'class' => TargetStatsExporter::class,
     ],
   ];
   return $export;
