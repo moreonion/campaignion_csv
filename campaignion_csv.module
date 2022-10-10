@@ -10,6 +10,7 @@ use Drupal\campaignion_csv\Exporter\ActivityExporter;
 use Drupal\campaignion_csv\Exporter\ContactExporter;
 use Drupal\campaignion_csv\Exporter\OptInExporter;
 use Drupal\campaignion_csv\Exporter\TargetStatsExporter;
+use Drupal\campaignion_csv\Exporter\TargetMessageExporter;
 use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\Files\ContactRangeFilePattern;
 use Drupal\campaignion_csv\Files\MonthlyFilePattern;
@@ -125,6 +126,17 @@ function campaignion_csv_campaignion_csv_info() {
     ],
     'exporter' => [
       'class' => TargetStatsExporter::class,
+    ],
+  ];
+  $export['target_messages'] = [
+    'file_pattern' => [
+      'class' => MonthlyFilePattern::class,
+      'path' => 'target-messages/%Y-%m.csv',
+      'retention_period' => new \DateInterval('P6M'),
+      'refresh_interval' => new \DateInterval('PT23H30M'),
+    ],
+    'exporter' => [
+      'class' => TargetMessageExporter::class,
     ],
   ];
   return $export;
