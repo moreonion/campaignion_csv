@@ -2,8 +2,10 @@
 
 namespace Drupal\campaignion_csv\Exporter;
 
+use Drupal\campaignion_csv\Exporter\WebformFormatted\Column;
 use Drupal\campaignion_csv\Files\CsvFileInterface;
 use Drupal\campaignion_csv\Timeframe;
+use Drupal\little_helpers\Webform\Submission;
 
 /**
  * Export messages sent to targets.
@@ -25,13 +27,19 @@ class TargetMessageExporter {
   protected $mapping;
 
   /**
+   * Submission columns to export in addition to the target / message data.
+   *
+   * @var \Drupal\campaignion_csv\Exporter\WebformFormatted\Column[] $columns
+   */
+  protected $columns;
+
+  /**
    * Create a new exporter based on the info.
    */
   public static function fromInfo(array $info) {
     $info += [
+      'columns' => [],
       'mapping' => [
-        'nid' => 'nid',
-        'sid' => 'sid',
         'cid' => 'cid',
         'Salutation' => 'target.salutation',
         'Area / Constituency' => 'target.area.name',
@@ -46,7 +54,11 @@ class TargetMessageExporter {
         'Footer' => 'message.footer',
       ],
     ];
-    return new static($info['timeframe'], $info['mapping']);
+    foreach ($info['columns'] as $label => $column_info) {
+      $column_info['label'] = $label;
+      $columns[] = Column::fromInfo($column_info);
+    }
+    return new static($info['timeframe'], $columns, $info['mapping']);
   }
 
   /**
@@ -54,11 +66,14 @@ class TargetMessageExporter {
    *
    * @param \Drupal\campaignion_csv\Timeframe $timeframe
    *   Export data for submissions within this timeframe.
+   * @param \Drupal\campaignion_csv\Exporter\WebformFormatted\Column[] $columns
+   *   Submission columns to export in addition to the target / message data.
    * @param string[] $mapping
-   *   Mapping of column headers to data paths.
+   *   Mapping of column headers to data paths in the e2t_selector data.
    */
-  public function __construct(Timeframe $timeframe, array $mapping) {
+  public function __construct(Timeframe $timeframe, array $columns, array $mapping) {
     $this->timeframe = $timeframe;
+    $this->columns = $columns;
     $this->mapping = $mapping;
   }
 
@@ -69,7 +84,7 @@ class TargetMessageExporter {
     $last_sid = 0;
     list($start, $end) = $this->timeframe->getTimestamps();
     $sql_sids = <<<SQL
-SELECT s.sid
+SELECT s.nid, s.sid, c.cid
 FROM webform_submissions s
   INNER JOIN webform_component c USING(nid)
 WHERE s.is_draft=0 AND c.type='e2t_selector' AND s.submitted BETWEEN :start AND :end AND s.sid>:last_sid
@@ -78,24 +93,17 @@ ORDER BY s.sid
 LIMIT 100
 SQL;
     $args = [':start' => $start, ':end' => $end - 1];
-    while ($sids = db_query($sql_sids, [':last_sid' => $last_sid] + $args)->fetchCol()) {
-      $sql = <<<SQL
-SELECT s.sid, s.nid, c.cid, d.data
-FROM webform_submissions s
-  INNER JOIN webform_component c USING(nid)
-  INNER JOIN webform_submitted_data d USING(nid, sid, cid)
-WHERE s.sid IN (:sids) AND c.type='e2t_selector'
-ORDER BY s.sid, c.cid, d.no
-SQL;
-      $rows = db_query($sql, [':sids' => $sids])->fetchAll();
+    while ($rows = db_query($sql_sids, [':last_sid' => $last_sid] + $args)->fetchAll()) {
       foreach ($rows as $row) {
-        $data = unserialize($row->data);
-        $row->target = $data['target'];
-        $row->message = $data['message'];
-        yield (array) $row;
+        $submission = Submission::load($row->nid, $row->sid);
+        $values = array_map('unserialize', $submission->valuesByCid($row->cid));
+        $values['cid'] = $row->cid;
+        foreach ($values as $value) {
+          yield [$submission, $value];
+        }
         $last_sid = $row->sid;
       }
-      $last_sid = end($sids);
+      drupal_static_reset('webform_get_submission');
     }
   }
 
@@ -103,12 +111,21 @@ SQL;
    * Write the data to the CsvFile.
    */
   public function writeTo(CsvFileInterface $file) {
-    $file->writeRow(array_keys($this->mapping));
-    foreach ($this->readSubmittedData() as $row) {
-      $row = array_map(function ($path) use ($row) {
-          return drupal_array_get_nested_value($row, explode('.', $path)) ?? '';
+    $header = array_map(function ($v) {
+      return $v->label;
+    }, $this->columns);
+    $file->writeRow(array_merge($header, array_keys($this->mapping)));
+
+    foreach ($this->readSubmittedData() as $pair) {
+      list($submission, $value) = $pair;
+      $row = [];
+      foreach ($this->columns as $column) {
+        $row[] = $column->value($submission);
+      }
+      $value_row = array_map(function ($path) use ($value) {
+        return drupal_array_get_nested_value($value, explode('.', $path)) ?? '';
       }, $this->mapping);
-      $file->writeRow($row);
+      $file->writeRow(array_merge($row, $value_row));
     }
   }
 

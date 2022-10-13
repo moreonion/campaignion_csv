@@ -49,7 +49,7 @@ class Exporter {
   public static function fromInfo(array $info) {
     $info += [
       'criteria' => [],
-      'colmuns' => [],
+      'columns' => [],
     ];
     if (!isset($info['nodes'])) {
       $info['nodes'] = static::getNodes($info['timeframe'], $info['criteria']);
