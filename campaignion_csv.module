@@ -143,6 +143,10 @@ function campaignion_csv_campaignion_csv_info() {
           'selector' => SubmissionPropertySelector::class,
           'property' => 'nid',
         ],
+        'node.type' => [
+          'selector' => SubmissionPropertySelector::class,
+          'property' => 'node.type',
+        ],
         'sid' => [
           'selector' => SubmissionPropertySelector::class,
           'property' => 'sid',
