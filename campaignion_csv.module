@@ -152,6 +152,9 @@ function campaignion_csv_campaignion_csv_info() {
           'property' => 'sid',
         ],
         'Email address' => ['keys' => ['email']],
+        'First name' => ['keys' => ['first_name']],
+        'Last name' => ['keys' => ['last_name']],
+        'Postcode' => ['keys' => ['postcode']],
       ],
     ],
   ];
