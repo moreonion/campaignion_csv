@@ -95,6 +95,11 @@ class Exporter {
     foreach ($result as $row) {
       yield Submission::load($row->nid, $row->sid);
       drupal_static_reset('webform_get_submission');
+      if (module_exists('webform_paymethod_select')) {
+        entity_get_controller('payment')->resetCache();
+      }
+      // Manually trigger PHP’s garbage collection to actually free the memory.
+      gc_collect_cycles();
     }
   }
 
