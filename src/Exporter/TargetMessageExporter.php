@@ -45,7 +45,7 @@ class TargetMessageExporter {
         'Area / Constituency' => 'target.area.name',
         'Area type' => 'target.area.type',
         'Area code' => 'target.area.gss_code',
-        'Country' => 'target.area.country__name',
+        'Country' => 'target.area.country.name',
         'Display name' => 'message.display',
         'To-name' => 'message.toName',
         'Subject' => 'message.subject',
@@ -123,7 +123,7 @@ SQL;
         $row[] = $column->value($submission);
       }
       $value_row = array_map(function ($path) use ($value) {
-        return drupal_array_get_nested_value($value, explode('.', $path)) ?? '';
+        return drupal_array_get_nested_value($value, explode('.', $path, 2)) ?? '';
       }, $this->mapping);
       $file->writeRow(array_merge($row, $value_row));
     }
