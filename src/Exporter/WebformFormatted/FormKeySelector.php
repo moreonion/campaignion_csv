@@ -10,6 +10,7 @@ use Drupal\little_helpers\Webform\Submission;
 class FormKeySelector implements SelectorInterface {
 
   protected $keys;
+  protected $skipEmpty;
 
   /**
    * Create a new instance from an info-array.
@@ -17,10 +18,11 @@ class FormKeySelector implements SelectorInterface {
    * @param array $info
    *   The info array. The following keys are in use:
    *   - keys: An array of form_keys to try until a non-NULL value is found.
+   *   - skip_empty: A flag to control whether empty values are ignored.
    */
   public static function fromInfo(array $info) {
-    $info += ['keys' => []];
-    return new static($info['keys']);
+    $info += ['keys' => [], 'skip_empty' => FALSE];
+    return new static($info['keys'], $info['skip_empty']);
   }
 
   /**
@@ -28,9 +30,12 @@ class FormKeySelector implements SelectorInterface {
    *
    * @param string[] $keys
    *   An array of form_keys to try until a non-NULL value is found.
+   * @param bool $skip_empty
+   *   Flag to control whether empty values are ignored (TRUE), or not (FALSE).
    */
-  public function __construct(array $keys) {
+  public function __construct(array $keys, bool $skip_empty) {
     $this->keys = $keys;
+    $this->skipEmpty = $skip_empty;
   }
 
   /**
@@ -40,14 +45,15 @@ class FormKeySelector implements SelectorInterface {
    *   The webform submission.
    *
    * @return mixed
-   *   The first non-NULL value for this submission or NULL if none was found.
+   *   The first value found for this submission or NULL if none was found.
    */
   public function value(Submission $submission) {
     foreach ($this->keys as $key) {
       $value = $submission->valueByKey($key);
-      if (!is_null($value)) {
-        return $value;
+      if (is_null($value) || $this->skipEmpty && empty($value)) {
+        continue;
       }
+      return $value;
     }
     return NULL;
   }
