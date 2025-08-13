@@ -57,6 +57,8 @@ class OptInExporter {
       ->fields('ca', ['contact_id', 'created']);
     $q->innerJoin('campaignion_opt_in', 'o', 'o.activity_id=ca.activity_id');
     $q->fields('o', ['id', 'channel', 'statement']);
+    $q->innerJoin('field_data_redhen_contact_email', 'ce', 'ce.entity_id=ca.contact_id');
+    $q->fields('ce', ['redhen_contact_email_value']);
     $q->condition('ca.created', [$start, $end - 1], 'BETWEEN');
     $q->condition('o.operation', $this->optIn ? 1 : 0);
     $q->orderBy('o.id');
@@ -73,6 +75,7 @@ class OptInExporter {
       'Contact ID',
       'Channel',
       'Statement',
+      'Email',
     ];
     $file->writeRow($header);
 
@@ -83,6 +86,7 @@ class OptInExporter {
         $r->contact_id,
         $r->channel,
         $r->statement,
+        $r->redhen_contact_email_value,
       ];
       $file->writeRow($row);
     }
