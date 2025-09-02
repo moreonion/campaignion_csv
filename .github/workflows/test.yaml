@@ -6,7 +6,7 @@ on:
 
 jobs:
   phpunit:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         php-versions: ["7.3", "7.4"]
@@ -25,6 +25,7 @@ jobs:
       run: |
         sudo systemctl start mysql
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+        mysql -e "ALTER USER '${{ env.DB_USER }}'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';" -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
     - name: Set env
       run: |
         echo "REPO=`pwd`" >> $GITHUB_ENV
@@ -34,7 +35,7 @@ jobs:
       id: composer-cache
       run: |
         echo "::set-output name=dir::$(composer config cache-files-dir)"
-    - uses: actions/cache@v2
+    - uses: actions/cache/restore@v4
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-
@@ -45,13 +46,18 @@ jobs:
         mkdir -p $COMPOSER_HOME
         cd $COMPOSER_HOME
         composer require drush/drush:8.3.* phpunit/phpunit:^8 torotil/upal:2.0.0-RC1
+    - name: Cache composer packages
+      id: composer-cache-write
+      uses: actions/cache/save@v4
+      with:
+        key: ${{ runner.os }}-composer-
     - name: Bootstrap drupal
       run: |
         php -d sendmail_path=`which true` $COMPOSER_HOME/vendor/bin/drush.php --yes core-quick-drupal --core=drupal-7.82 --profile=testing --no-server --db-url=mysql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@127.0.0.1:3306/${{ env.DB_DATABASE }} --root=$ROOT
         ln -s $REPO $ROOT/sites/all/modules/module_under_test
         cd $ROOT
         curl https://www.drupal.org/files/issues/1891356-drupal_static_reset-on-module-changes-30-D7.patch | patch -p1
-        drush dl redhen campaignion ctools psr0 views webform
+        drush dl redhen-1.13 campaignion-2.48 ctools-1.21 entity-1.11 features-2.15 little_helpers-2.0 payment-1.20 psr0-1.6 variable-2.5 views-3.30 webform-4.27 webform_template-4.0
         drush --yes pm-enable campaignion_csv campaignion_csv_test
     - name: Run phpunit tests
       run: UPAL_ROOT=$ROOT UPAL_WEB_URL=http://127.0.0.1 XDEBUG_MODE=coverage phpunit --bootstrap=$COMPOSER_HOME/vendor/torotil/upal/bootstrap.php --coverage-clover=coverage.xml .
