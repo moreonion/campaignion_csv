@@ -72,10 +72,6 @@ function campaignion_csv_campaignion_csv_info() {
     'exporter' => [
       'class' => WebformFormattedExporter::class,
       'columns' => [
-        'Serial' => [
-          'selector' => SubmissionPropertySelector::class,
-          'property' => 'serial',
-        ],
         'NID' => [
           'selector' => SubmissionPropertySelector::class,
           'property' => 'nid',
@@ -102,18 +98,6 @@ function campaignion_csv_campaignion_csv_info() {
         'Draft' => [
           'selector' => SubmissionPropertySelector::class,
           'property' => 'is_draft',
-        ],
-        'IP Address' => [
-          'selector' => SubmissionPropertySelector::class,
-          'property' => 'remote_addr',
-        ],
-        'UID' => [
-          'selector' => SubmissionPropertySelector::class,
-          'property' => 'uid',
-        ],
-        'Username' => [
-          'selector' => SubmissionPropertySelector::class,
-          'property' => 'user.name',
         ],
         'Referer' => [
           'selector' => SubmissionPropertySelector::class,
