@@ -139,10 +139,6 @@ function campaignion_csv_campaignion_csv_info() {
           'selector' => SubmissionPropertySelector::class,
           'property' => 'tracking.other',
         ],
-        'User-ID' => [
-          'selector' => SubmissionPropertySelector::class,
-          'property' => 'tracking.user_id',
-        ],
         'Country' => [
           'selector' => SubmissionPropertySelector::class,
           'property' => 'tracking.country',
