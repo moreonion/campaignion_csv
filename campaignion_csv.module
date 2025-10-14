@@ -13,6 +13,7 @@ use Drupal\campaignion_csv\Exporter\TargetStatsExporter;
 use Drupal\campaignion_csv\Exporter\TargetMessageExporter;
 use Drupal\campaignion_csv\Exporter\WebformFormatted\DateFormatter;
 use Drupal\campaignion_csv\Exporter\WebformFormatted\Exporter as WebformFormattedExporter;
+use Drupal\campaignion_csv\Exporter\WebformFormatted\OptInChannelSelector;
 use Drupal\campaignion_csv\Exporter\WebformFormatted\SubmissionPropertySelector;
 use Drupal\campaignion_csv\Exporter\WebformGeneric\Exporter as WebformExporter;
 use Drupal\campaignion_csv\Files\ContactRangeFilePattern;
@@ -47,7 +48,7 @@ function campaignion_csv_cron() {
 function campaignion_csv_campaignion_csv_info() {
   $date_transformer = [
     'class' => DateFormatter::class,
-    'date_format' => 'Y-m-d H:i:s'
+    'date_format' => '%d/%m/%Y - %H:%M',
   ];
   $export['actions_monthly'] = [
     'file_pattern' => [
