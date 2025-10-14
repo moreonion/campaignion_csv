@@ -60,7 +60,7 @@ class OptInExporter {
     $q->innerJoin('field_data_redhen_contact_email', 'ce', 'ce.entity_id=ca.contact_id');
     $q->fields('ce', ['redhen_contact_email_value']);
     $q->innerJoin('campaignion_activity_webform', 'aw', 'aw.activity_id=ca.activity_id');
-    $q->fields('aw', ['nid, sid']);
+    $q->fields('aw', ['nid','sid']);
     $q->condition('ca.created', [$start, $end - 1], 'BETWEEN');
     $q->condition('o.operation', $this->optIn ? 1 : 0);
     $q->orderBy('o.id');
