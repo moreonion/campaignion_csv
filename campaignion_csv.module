@@ -156,7 +156,6 @@ function campaignion_csv_campaignion_csv_info() {
         'Country' => ['keys' => ['country']],
         'Address line 1' => ['keys' => ['street_address']],
         'Address line 2' => ['keys' => ['street_address_2']],
-        'City' => ['keys' => ['city']],
         'Comment' => ['keys' => ['comment']],
         'Email opt-in' => [
           'selector' => OptInChannelSelector::class,
